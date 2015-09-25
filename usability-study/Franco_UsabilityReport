@@ -1,0 +1,125 @@
+Introduction
+Objectives
+Methods
+	-survey design
+	-study sample
+	-data collection
+	-data analysis
+Results
+Conclusion
+
+Introduction
+Three metrics; why we chose them
+aspects of webmail considered in this study and why
+Mental Model <-> Guidelines
+Introduction
+	The purpose of this study was to test the interaction design of two webmail interfaces as to how well each facilitates users’ activities. We also conducted this study to see how well each interface conformed to their corresponding guidelines provided by the companies that designed them. 
+
+Methods
+	We created anonymous email accounts for both Yahoo! and Outlook with the address “ixdtest” that users would use to complete the tasks. We decided on three tasks that would allow users to interact with aspects of the interface that are considered to be used most often:
+1.) Replying to an email - We populated the inboxes with emails that contained subject lines such as “Please reply to this email” and simple questions such as “What is your major?”, “What is your class year?”, and “What is 2 + 2?” that users would have to reply to. This was done prior to the study. Users were then asked to start from the inbox, bring up the original email message to the screen, and then reply to that email by answering the said questions and clicking “Send.”
+2.) Recovering an email from the trash - A previously deleted email with a subject line of “Recover this email” or “Restore this email” would be in the trash before the users began the study. The users were then asked to navigate to the trash and find a way to move it to the inbox.
+3.) Changing the theme - Users were asked to find the “theme” settings and change the background/wallpaper of the interface.
+Only individuals who had never before used Yahoo! Mail or Outlook Mail (or at least not used them in a very long time) were asked to participate in the study. To collect data, facilitators used QuickTime Player for Mac or Screencast-O-Matic for PC to record screencasts as users completed the tasks. Audio was also recorded during the screencasts via these apps for qualitative data. 
+Our group agreed on a certain measuring scheme when extracting the time data from the screencasts: We started timing users from the moment they moved the mouse “toward the goal in mind” and stopped timing the users when they felt they had successfully completed the task. For example, some users would change the theme multiple times before deciding on one that they preferred. Our reasoning is that since this is a user-centered study, our data could have added value by also reflecting user perceptions. Yes, the users objectively switched the background to a different theme for their first click, but if they did not prefer that theme, then in their minds they did not “successfully” change the theme. Framing the data in this manner provides insight into how the interfaces facilitate usability.
+
+Data Collection
+There were two main phases to the study. The first phase involved having the users complete all three tasks for the first time without having seen the interfaces before. These recordings were used to extract data for Learnability metrics. The second phase involved having the users complete the same three tasks on each of the interfaces a second time. This second set of recordings was used to extract data for Efficiency metrics. Users were offered time after the first phase to practice the three tasks before entering the second phase of the study. During all times of the study, facilitators observed the users’ actions to take note if any Errors made at any time. We defined an Error as an event where the user clicks on something expecting one thing to happen but getting an unexpected result. 
+For qualitative data, users were asked to vocalize their thinking, frustrations, confusion, mastery, and so on, during the recording, and they were also interviewed after the two phases for them to explain how or why they utilized or reacted to the interface in certain ways. Post-phase interviews consisted of inquiries into how users perceived the interface: “Were there any aspects that you found confusing?”; “Were there any aspects that you found helpful?”; “Why did you ____ when you ____?”; “In general, how would you describe ____ ?”
+Users were told which tasks to accomplish before the recording started, however, facilitators also guided users on which tasks needed to be completed and whether actions were valid or not during each recording.
+
+Results
+(The complete set of the data can be found in Appendix 1.)
+A total of 10 individuals participated in the study. Each survey with a participant averaged between 5 - 12 minutes to record the tasks for both phases of the study as well as interview that person about their experience and perceptions. Each task with 
+
+
+
+
+
+
+
+
+
+
+Appendix 1
+
+Learnability Metric
+
+Replying to an Email
+ 
+ 
+
+Recovering from Trash
+
+ 
+
+ 
+Changing Theme
+
+ 
+ 
+
+Efficiency Metric
+
+Replying to an Email
+ 
+ 
+
+Recovering from Trash
+ 
+ 
+
+Changing Theme
+ 
+ 
+
+
+
+
+
+Paper
+1.)	Yahoo
+a.)	trends
+b.)	apply guidelines
+2.)	Outlook
+a.)	trends
+b.)	apply guidelines
+3.)	Yahoo & Outlook
+a.)	data
+4.)	Conclusions based on data and observations
+
+Trends:
+
+preconceived notions/expectations about interfaces based on other interfaces
+Example: one participant going straight to settings and skipping over “themes” link when changing the theme during the Learnability test. the participant expected to find theme settings in settings, but they were separated in the menu. [photo]
+
+Yahoo
+
+Replying to an email
+	Questions left view when replying - 1
+	Hard time seeing “Reply” options in text of email - Kalia, Mattie, Maurice
+		Mental Model? - perceived options as part of email text?
+Recovering from trash
+	Opened email - Andres, Josh, Kalia, Mattie, Maurice, Sean
+	Dragged email - Josh (Learnability) because facilitator accidentally said “drag”
+
+Changing Theme
+	Started exploring on the top left - Andres, Josh, Kalia
+	Knew to look for the “gear” - 
+	Hover feature disruptive (did not happen) - Andres, Kalia
+
+Outlook
+
+Replying to an email
+	More than 4 seconds finding “Send” - 
+	
+Recovering from trash
+	Went to Junk first -
+
+
+
+Screenshots
+
+Original Email leaving view when replying
+
+		
