@@ -1,15 +1,19 @@
 $(function () {
-
-    $("#search-button").click(function () {
+    $("#directions-button").click(function () {
         $.getJSON(
             // URL
-            "http://maps.googleapis.com/maps/api/geocode",
+            //"http://maps.googleapis.com/maps/api/geocode",
             //"https://www.google.com/maps/embed/v1/search",
+            "https://maps.googleapis.com/maps/api/directions",
             // parameters
             {
-                q: $("#search-term").val(),
+                origin: $("#origin-term").val(),
+                destination: $("#destination-term").val(),
                 // api_key: 
-                key: "AIzaSyAdvUf9o7si6d0ls4XDuFECGXHIoduhnZM"
+                key: "AIzaSyDdA23PKfT8jDq6v00Y-G1uT7pzRmNn9B8"
+            },
+            function () {
+                alert("Clicked!");
             }
 
         ).done(function (result) {
