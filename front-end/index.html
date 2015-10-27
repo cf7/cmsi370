@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
     <head>
-        <meta charset="UTF-8"/>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Hello</title>
 
         <!-- Link elements ideally go in the head. -->
@@ -10,13 +12,25 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
     </head>
     <body>
-        <p>HTML!</p>
-
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>Hello</h3>
+                    <input type="text" class="form-control" id="search-term">
+                    <button id="search-button" class="btn btn-default">Search</button>
+                </div>
+                <div class="col-xs-12">
+                    <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=Los%20Angeles%2C%20CA%2C%20United%20States&key=AIzaSyAdvUf9o7si6d0ls4XDuFECGXHIoduhnZM" allowfullscreen></iframe>
+                    <iframe width="600" height="450" frameborder="0" style="border:0" src="front-end.js" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
 
         <!-- Script elements ideally go at the bottome of the body. -->
+        <!-- Bootstrap also depends on javascript and jquery, but only jquery needs to be added in addition
+        to what is on Bootstrap website. -->
         <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-        <!-- Bootstrap also depends on javascript and jquery, but only jquery needs to be added in addition
-        to what is on Bootstrap website. --> 
+        <script src="front-end.js"></script>
     </body>
 </html>
