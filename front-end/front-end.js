@@ -1,21 +1,33 @@
+// $(function () {
+//     $("#directions-button").click(function () {
+//         $.getJSON(
+//             // URL
+//             "http://localhost:3000/proxy",
+//             // parameters
+//             {
+//                 origin: $("#origin-term").val(),
+//                 destination: $("#destination-term").val(),
+//                 key: "AIzaSyB9JqZXr0WsP8zPvPZ-YyG3PbAzIyKa-aQ"
+//             }
+//         ).done(function (result) {
+//             console.log(result);
+//         });
+//     });
+
+// });
+
+
 $(function () {
-    $("#directions-button").click(function () {
+    $("#get-channels").click(function () {
         $.getJSON(
             // URL
-            //"http://maps.googleapis.com/maps/api/geocode",
-            //"https://www.google.com/maps/embed/v1/search",
-            "https://maps.googleapis.com/maps/api/directions",
+            "https://slack.com/api/channels.list",
             // parameters
             {
-                origin: $("#origin-term").val(),
-                destination: $("#destination-term").val(),
-                // api_key: 
-                key: "AIzaSyDdA23PKfT8jDq6v00Y-G1uT7pzRmNn9B8"
-            },
-            function () {
-                alert("Clicked!");
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                "ok": $("#directions-button").val(),
+                "channels": $("#directions-button").val()
             }
-
         ).done(function (result) {
             console.log(result);
         });

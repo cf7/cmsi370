@@ -15,17 +15,30 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h3>Directions</h3>
-                    <label for="origin-term">To:</label>
-                    <input type="text" class="form-control" id="origin-term">
-                    <label for="destination-term">From:</label>
-                    <input type="text" class="form-control" id="destination-term">
+                    <h3>Welcome to the CMSI370 Project!</h3>                   
                     <p><br></p>
-                    <button id="directions-button" class="btn btn-default">Get Directions</button>
+                    <button id="get-channels" class="btn btn-default">Get Channels</button>
+                    <p><br></p>
+                    <label for="channels-textarea">Channels</label>
+                    <textarea class="form-control" rows="4" id="channels-textarea"></textarea>
                 </div>
                 <div class="col-xs-12">
                     <p><br></p>
-                    <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=Los%20Angeles%2C%20CA%2C%20United%20States&key=AIzaSyDdA23PKfT8jDq6v00Y-G1uT7pzRmNn9B8" allowfullscreen></iframe>
+                    <label for="channel-input">Choose a channel (enter the name of the channel)</label>
+                    <input type="text" class="form-control" id="channel-input">
+                    <button id="select-button" class="btn btn-default">Select</button>
+                </div>
+                <div class="col-xs-12">
+                    <p><br><br></p>
+                    <label for="posts">Posts</label>
+                    <textarea class="form-control" rows="8" id="posts"></textarea>
+                    <button id="refresh-button" class="btn btn-default">Refresh</button>
+                </div>
+                <div class="col-xs-12">
+                    <p><br></p>
+                    <label for="post-input">Type your messages here</label>
+                    <input type="text" class="form-control" id="post-input">
+                    <button id="post-button" class="btn btn-default">Post Message</button>
                 </div>
             </div>
         </div>
@@ -36,8 +49,6 @@
         <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
         <script src="front-end.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://maps.google.com/maps?file=api&v=2&sensor=false&key=AIzaSyDdA23PKfT8jDq6v00Y-G1uT7pzRmNn9B8">
-</script>
+        
     </body>
 </html>
