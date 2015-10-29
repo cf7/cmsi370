@@ -17,7 +17,7 @@
 // });
 
 
-$(function () {
+$(function () {    
     $("#get-channels").click(function () {
         $.getJSON(
             // URL
@@ -30,6 +30,8 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
+            var channels = JSON.stringify(result);
+            document.getElementById("channels-textarea").innerHTML = channels;
         });
     });
 
