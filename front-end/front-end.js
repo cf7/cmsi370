@@ -1,22 +1,3 @@
-// $(function () {
-//     $("#directions-button").click(function () {
-//         $.getJSON(
-//             // URL
-//             "http://localhost:3000/proxy",
-//             // parameters
-//             {
-//                 origin: $("#origin-term").val(),
-//                 destination: $("#destination-term").val(),
-//                 key: "AIzaSyB9JqZXr0WsP8zPvPZ-YyG3PbAzIyKa-aQ"
-//             }
-//         ).done(function (result) {
-//             console.log(result);
-//         });
-//     });
-
-// });
-
-
 $(function () {
 
     $("#get-channels").click(function () {
@@ -69,7 +50,7 @@ $(function () {
             ).done(function (result) {
                 console.log(result);
                 var chatHistoryString = "";
-                for (index = 0; index < Object.keys(result["messages"]).length; index++) {
+                for (index = 0; index < result["messages"].length; index++) {
                     chatHistoryString = result["messages"][index].username + ": " + result["messages"][index].text + "<br>" + chatHistoryString;
                 }
                 document.getElementById("posts").innerHTML = chatHistoryString;
@@ -89,7 +70,7 @@ $(function () {
         ).done(function (result) {
             console.log(result);
             var chatHistoryString = "";
-            for (index = 0; index < Object.keys(result["messages"]).length; index++) {
+            for (index = 0; index < result["messages"].length; index++) {
                 chatHistoryString = result["messages"][index].username + ": " + result["messages"][index].text + "<br>" + chatHistoryString;
             }
             document.getElementById("posts").innerHTML = chatHistoryString;
