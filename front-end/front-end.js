@@ -17,7 +17,8 @@
 // });
 
 
-$(function () {    
+$(function () {
+
     $("#get-channels").click(function () {
         $.getJSON(
             // URL
@@ -28,14 +29,36 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
-            var channels = JSON.stringify(result);
-            document.getElementById("channels-displayarea").innerHTML = channels;
+            var channelsList = "";
+            for(index = 0; index < Object.keys(result["channels"]).length; index++) {
+                channelsList = channelsList + "<br>" + result["channels"][index].name;
+            }            
+            document.getElementById("channels-displayarea").innerHTML = channelsList;
+        });
+    });
+
+    var selectedChannel;
+
+    $("#select-button").click(function () {
+        $.getJSON(
+            // URL
+            "https://slack.com/api/channels.list",
+            // parameters
+            {
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+            }
+        ).done(function (result) {
+            console.log(result);
+            selectedChannel = $("#channel-input").val();
+            document.getElementById("selected-channel-display").innerHTML = selectedChannel;
         });
     });
 
     $("#post-button").click(function () {
         $.getJSON(
+            // URL
             "https://slack.com/api/chat.postMessage",
+            //parameters
             {
                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                 channel: "C0DATPCTD",
@@ -43,8 +66,10 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
+            var posts = JSON.stringify(result);
+            document.getElementById("posts").innerHTML = posts + document.getElementById("posts").innerHTML;
+            document.getElementById("post-input").value = "";
         });
-
     });
 
 });
