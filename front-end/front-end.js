@@ -1,5 +1,19 @@
 $(function () {
 
+    $("#find-users").click(function () {
+        $.getJSON(
+            // URL
+            "https://slack.com/api/users.list",
+            // parameters
+            {
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+            }
+        ).done(function (result) {
+            console.log(result);
+            $("#users-display").append(result["members"][0].name);
+        });
+    });
+
     $("#get-channels").click(function () {
         $.getJSON(
             // URL
@@ -14,7 +28,7 @@ $(function () {
             for (index = 0; index < Object.keys(result["channels"]).length; index++) {
                 channelsList = channelsList + "<br>" + result["channels"][index].name;
             }            
-            document.getElementById("channels-displayarea").innerHTML = channelsList;
+            $("#channels-displayarea").append(channelsList);
         });
     });
 
@@ -30,18 +44,20 @@ $(function () {
 
     var identifyUser = function (message) {
         if (message["username"] == undefined) {
+            var username = "";
             $.getJSON(
                 // URL
                 "https://slack.com/api/users.info",
                 //parameters
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                    user: message["user"]
+                    user: "U0DAVKJKZ"
                 }
             ).done(function (result) {
                 console.log(result);
-                return result["user"]["name"];
+                username = result["user"].name;
             });
+            return username;
         } else {
             return message["username"];
         }
@@ -63,8 +79,8 @@ $(function () {
                     selectedChannel = result["channels"][index];
                 }
             }
-            document.getElementById("selected-channel-display").innerHTML = selectedChannelString;
-            document.getElementById("channel-input").value = "";
+            $("#selected-channel-display").append(selectedChannelString);
+            $("#channel-input").val("");
 
             $.getJSON(
                 // URL
@@ -77,7 +93,7 @@ $(function () {
             ).done(function (result) {
                 console.log(result);
                 var chatHistoryString = storeMessages(result);
-                document.getElementById("posts").innerHTML = chatHistoryString;
+                $("#posts").append(chatHistoryString);
             });
         });
     });
@@ -94,7 +110,7 @@ $(function () {
         ).done(function (result) {
             console.log(result);
             var chatHistoryString = storeMessages(result);
-            document.getElementById("posts").innerHTML = chatHistoryString;
+            $("#posts").val(chatHistoryString);
         });
     });
 
@@ -110,8 +126,11 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
-            document.getElementById("posts").innerHTML = document.getElementById("posts").innerHTML + "<br>" + result["message"]["username"] + ": " + result["message"]["text"];
-            document.getElementById("post-input").value = "";
+            $("#posts").append( 
+                "<br>" + result["message"]["username"] + 
+                ": " + result["message"]["text"]
+                );
+           $("#post-input").val("");
         });
     });
 
