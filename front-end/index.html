@@ -16,39 +16,50 @@
             <div class="row">
 
                 <div class="col-xs-12">
-                    <h3>Welcome to the CMSI370 FrontEndProject!</h3>
-                    <p>Check out this team page on Slack on the cmsi370project.slack.com page!</p>                   
-                    <p><br></p>
-                    <button id="find-users" class="btn btn-default">Find Users</button>
-                    <p id="users-display"></p>
-                    <button id="get-channels" class="btn btn-default">Get Channels</button>
-                    <p><br></p>
-                    <label for="channels-textarea">Channels</label>
-                    <p id="channels-displayarea"></p>
+                    <div class="page-header">
+                    <h1>Welcome to the CMSI370 FrontEndProject!<br>
+                        <small>Check out this team page on Slack at cmsi370project.slack.com</small>
+                    </h1>
+                    </div>
+                                      
+                    
                 </div>
 
-                <div class="col-xs-12">
-                    <p><br></p>
-                    <label for="channel-input">Select a channel (enter the name of the channel)</label>
-                    <input type="text" class="form-control" id="channel-input">
-                    <button id="select-button" class="btn btn-default">Select</button>
-                </div>
-                <p id="test-area"></p>
-                <div class="col-xs-12">
-                    <p><br><br></p>
-                    <label for="selected-channel-display">Channel Selected</label>
-                    <p id="selected-channel-display"></p>
-                    <p><br><br></p>
-                    <label for="posts">Posts</label>
-                    <p id="posts"></p>
-                    <button id="refresh-button" class="btn btn-default">Refresh</button>
+                <div class="col-sm-12">
+
+                    <div class="col-sm-2">
+                        <p><br></p>
+                        <button id="get-channels" class="btn btn-default">Get Channels</button>
+                        <p><br></p>
+                        <label for="channels-textarea">Channels</label>
+                        <p id="channels-displayarea"></p>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <label for="channel-input">Select a channel (enter the name of the channel)</label>
+                        <input type="text" class="form-control" id="channel-input">
+                        <button id="select-button" class="btn btn-default">Select</button>
+                        <p><br><br></p>
+                        <label for="selected-channel-display">Channel Selected</label>
+                        <p id="selected-channel-display"></p>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <label for="posts">Posts</label>
+                        <textarea class="form-control" rows="10" id="posts"></textarea>
+                        <button id="refresh-button" class="btn btn-default">Refresh</button>
+                    </div>
+
                 </div>
 
-                <div class="col-xs-12">
+                <div class="col-sm-6">
                     <p><br></p>
                     <label for="post-input">Type your messages here</label>
                     <input type="text" class="form-control" id="post-input">
                     <button id="post-button" class="btn btn-default">Post Message</button>
+                    <p><br></p>
+                    <button id="find-users" class="btn btn-default">Find Users</button>
+                        <p id="users-display"></p>
                 </div>
 
             </div>

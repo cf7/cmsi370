@@ -37,7 +37,7 @@ $(function () {
     var storeMessages = function (result) { //used for select-button and refresh-button
         var chatHistoryString = "";
         for (index = 0; index < result["messages"].length; index++) {
-            chatHistoryString = identifyUser(result["messages"][index]) + ": " + result["messages"][index].text + "<br>" + chatHistoryString;
+            chatHistoryString = identifyUser(result["messages"][index]) + ": " + result["messages"][index].text + "\n" + chatHistoryString;
         }
         return chatHistoryString;
     }
@@ -127,7 +127,7 @@ $(function () {
         ).done(function (result) {
             console.log(result);
             $("#posts").append( 
-                "<br>" + result["message"]["username"] + 
+                "\n" + result["message"]["username"] + 
                 ": " + result["message"]["text"]
                 );
            $("#post-input").val("");
