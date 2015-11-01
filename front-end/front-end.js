@@ -10,12 +10,18 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
-            var channelsList = "";
-            for (index = 0; index < Object.keys(result["channels"]).length; index++) {
-                channelsList = channelsList + "<br>" + result["channels"][index].name;
+            var channelsList = new Array(result["channels"].length);
+            for (index = 0; index < result["channels"].length; index++) {
+                channelsList[index] = result["channels"][index].name;
             }
             $("#channels-displayarea").html(""); // .val("") wasn't working for some reason
-            $("#channels-displayarea").append(channelsList);
+            for (index = 0; index < channelsList.length; index++) {
+                $("#channels-displayarea").append(
+                    '<br>'
+                    + '<input type="checkbox" name="channel-box" value=index.toString()> '
+                    + channelsList[index]
+                    );
+            }
         });
     });
 
