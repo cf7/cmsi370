@@ -59,6 +59,7 @@ $(function () {
         for (index = 0; index < selectedBoxes.length; index++) {
             $("#selected-channel-display").append(
                 $('<div></div>').addClass("col-sm-4").append(
+                $('<br>'),
                 $('<label></label>').html(selectedBoxes[index]),
                 $('<textarea rows="10" class="form-control"></textarea>').attr("id", selectedBoxes[index] + "-channel"),
                 $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-refresh").html("Refresh"),
@@ -98,9 +99,8 @@ $(function () {
                     {
                         token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                         channel: selectedChannels[index]["id"]
-                    },
-
-                    function (result) {
+                    }
+                ).done(function (result) {
                         console.log(result);
                         var chatHistoryString = storeMessages(result);
                         $(id).html("");
@@ -108,8 +108,7 @@ $(function () {
                         $(id).scrollTop(
                             $(id).prop("scrollHeight")
                             );
-                    }
-                );
+                    });
             }
         });
     });
