@@ -23,7 +23,7 @@ $(function () {
         }
     });
 
-    var storeMessages = function (result) { //used for select-button and refresh-button
+    var storeMessages = function (result) { //used for submit-button and refresh-button
         var chatHistoryString = "";
         for (index = 0; index < result["messages"].length; index++) {
             chatHistoryString = identifyUser(result["messages"][index]) + ": " + result["messages"][index].text + "\n" + chatHistoryString;
@@ -84,7 +84,7 @@ $(function () {
             var scIndex = 0;
 
             for (index = 0; index < result["channels"].length; index++) {
-                if ($.inArray(result["channels"][index].name, selectedBoxes) == 0) {
+                if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
                     selectedChannels[scIndex] = result["channels"][index];
                     scIndex++;
                 }
@@ -98,19 +98,22 @@ $(function () {
                     {
                         token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                         channel: selectedChannels[index]["id"]
+                    },
+
+                    function (result) {
+                        console.log(result);
+                        var chatHistoryString = storeMessages(result);
+                        $(id).html("");
+                        $(id).append(chatHistoryString);
+                        $(id).scrollTop(
+                            $(id).prop("scrollHeight")
+                            );
                     }
-                ).done(function (result) {
-                    console.log(result);
-                    var chatHistoryString = storeMessages(result);
-                    $(id).html("");
-                    $(id).append(chatHistoryString);
-                    $(id).scrollTop(
-                        $(id).prop("scrollHeight")
-                        );
-                });
+                );
             }
         });
     });
+
 
     $("#refresh-button").click(function () {
         $.getJSON(
