@@ -1,19 +1,5 @@
 $(function () {
 
-    $("#find-users").click(function () {
-        $.getJSON(
-            // URL
-            "https://slack.com/api/users.list",
-            // parameters
-            {
-                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-            }
-        ).done(function (result) {
-            console.log(result);
-            $("#users-display").append(result["members"][0].name);
-        });
-    });
-
     $("#get-channels").click(function () {
         $.getJSON(
             // URL
@@ -27,7 +13,8 @@ $(function () {
             var channelsList = "";
             for (index = 0; index < Object.keys(result["channels"]).length; index++) {
                 channelsList = channelsList + "<br>" + result["channels"][index].name;
-            }            
+            }
+            $("#channels-displayarea").html(""); // .val("") wasn't working for some reason
             $("#channels-displayarea").append(channelsList);
         });
     });
@@ -43,23 +30,21 @@ $(function () {
     }
 
     var identifyUser = function (message) {
-        if (message["username"] == undefined) {
-            var username = "";
-            $.getJSON(
+        if (message["user"] != undefined) {
+            return $.getJSON(
                 // URL
                 "https://slack.com/api/users.info",
                 //parameters
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                    user: "U0DAVKJKZ"
+                    user: message["user"]
                 }
             ).done(function (result) {
                 console.log(result);
-                username = result["user"].name;
+                return result["user"]["name"];
             });
-            return username;
         } else {
-            return message["username"];
+            return "bot";
         }
     }
 
@@ -79,6 +64,7 @@ $(function () {
                     selectedChannel = result["channels"][index];
                 }
             }
+            $("#selected-channel-display").html("");
             $("#selected-channel-display").append(selectedChannelString);
             $("#channel-input").val("");
 
@@ -93,7 +79,9 @@ $(function () {
             ).done(function (result) {
                 console.log(result);
                 var chatHistoryString = storeMessages(result);
+                $("#posts").html("");
                 $("#posts").append(chatHistoryString);
+                $("#posts").scrollTop($("#posts").prop("scrollHeight"));
             });
         });
     });
@@ -111,6 +99,7 @@ $(function () {
             console.log(result);
             var chatHistoryString = storeMessages(result);
             $("#posts").val(chatHistoryString);
+            $("#posts").scrollTop($("#posts").prop("scrollHeight"));
         });
     });
 
@@ -131,6 +120,22 @@ $(function () {
                 ": " + result["message"]["text"]
                 );
            $("#post-input").val("");
+           $("#posts").scrollTop($("#posts").prop("scrollHeight"));
+        });
+    });
+
+    $("#find-users").click(function () {
+        $.getJSON(
+            // URL
+            "https://slack.com/api/users.list",
+            // parameters
+            {
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+            }
+        ).done(function (result) {
+            console.log(result);
+            $("#users-display").html("");
+            $("#users-display").append(result["members"][0].name);
         });
     });
 
