@@ -287,19 +287,23 @@ $(function () {
                         selectedUser = result["members"][index];
                     }
                 }
-
-                $.getJSON(
-                    // URL
-                    "https://slack.com/api/channels.invite",
-                    // parameters
-                    {
-                        token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                        channel: selectedChannel["id"],
-                        user: selectedUser["id"]
-                    }
-                ).done(function (result) {
-                    console.log(result);
-                });
+                if ($('input[name=open-channel-button]:checked').length == 0) {
+                    alert("Please select an Open Channel to invite to.");
+                } else {
+                    alert(selectedChannel);
+                    $.getJSON(
+                        // URL
+                        "https://slack.com/api/channels.invite",
+                        // parameters
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: selectedChannel["id"],
+                            user: selectedUser["id"]
+                        }
+                    ).done(function (result) {
+                        console.log(result);
+                    });
+                }
             });
         });
     });

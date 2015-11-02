@@ -56,6 +56,8 @@ $(function () {
             return this.value;
         });
 
+        $("#selected-channel-display").html("");
+
         for (index = 0; index < selectedBoxes.length; index++) {
             $("#selected-channel-display").append(
                 $('<div></div>').addClass("col-sm-4").append(
@@ -287,19 +289,33 @@ $(function () {
                         selectedUser = result["members"][index];
                     }
                 }
-
-                $.getJSON(
-                    // URL
-                    "https://slack.com/api/channels.invite",
-                    // parameters
-                    {
-                        token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                        channel: selectedChannel["id"],
-                        user: selectedUser["id"]
-                    }
-                ).done(function (result) {
-                    console.log(result);
-                });
+                if ($('input[name=open-channel-button]:checked').length == 0) {
+                    alert("Please select an Open Channel to invite to.");
+                } else {
+                    $.getJSON(
+                        // URL
+                        "https://slack.com/api/channels.invite",
+                        // parameters
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: selectedChannel["id"],
+                            user: selectedUser["id"]
+                        }
+                    ).done(function (result) {
+                        console.log(result);
+                        if (!result["ok"]) {
+                            if (result["error"] == "cant_invite_self") {
+                                alert("Users cannot invite themselves to a channel.");
+                            } else if (result["error"] == "already_in_channel") {
+                                alert("This user is already in the channel.");
+                            }
+                        } else {
+                            $("#invite-display").append(
+                                $("<p></p>").html(selectedUser["name"] + " has been invited to " + result["channel"]["name"])
+                            );
+                        }
+                    });
+                }
             });
         });
     });
