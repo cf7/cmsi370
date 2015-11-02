@@ -91,17 +91,21 @@ $(function () {
                 }
             }
             for (index = 0; index < selectedChannels.length; index++) {
-                var id = "#" + selectedChannels[index].name + "-channel";
+                console.log("outside " + index);
+                (function (i) {
+                var id = "#" + selectedChannels[i].name + "-channel";
                 $.getJSON(
                     // URL
                     "https://slack.com/api/channels.history",
                     // parameters
                     {
                         token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                        channel: selectedChannels[index]["id"]
+                        channel: selectedChannels[i]["id"]
                     }
                 ).done(function (result) {
-                        console.log(result);
+                        console.log("inside " + index);
+                        console.log("inside i " + i);
+                        console.log(selectedChannels[i].name);
                         var chatHistoryString = storeMessages(result);
                         $(id).html("");
                         $(id).append(chatHistoryString);
@@ -109,6 +113,7 @@ $(function () {
                             $(id).prop("scrollHeight")
                             );
                     });
+            })(index);
             }
         });
     });
