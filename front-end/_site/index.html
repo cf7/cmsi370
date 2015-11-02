@@ -34,31 +34,34 @@
                         <p><br></p>
                         <button id="submit-button" class="btn btn-default">Submit</button>
                         <button id="refresh-button" class="btn btn-default">Refresh</button>
+                        <p><br></p>
                 </div>
-
-                <div class="col-sm-12" id="selected-channel-display">
+                <div class="col-sm-12" id="selected-channel-display" style="background-color:rgb(0,120,200)">
 
                 </div>
 
                 <div class="col-sm-12" id="input-display">
-                    <br>
-                    <label for="open-channels">Open Channels</lable>
-                    <p id="open-channels"></p>
-                    <label for="post-input">Type your message here</label>
-                    <input type="text" class="form-control" id="post-input">
-                    <button class="btn btn-default" id="post-button">Post Message</button>
+                    <div class="col-sm-4">
+                        <br>
+                        <label for="open-channels">Open Channels (Select which channel to post to)</lable>
+                        <p id="open-channels"></p>
+                    </div>
 
-                </div>
+                    <div class="col-sm-4" style="background-color:rgb(200,255,100)">
+                        <label for="post-input">Type your message here</label>
+                        <input type="text" class="form-control" id="post-input">
+                        <button class="btn btn-default" id="post-button">Post Message</button>
+                        <p><br></p>
+                    </div>
 
-                <div class="col-sm-7">
-                    <p><br></p>
-                    <button id="find-users" class="btn btn-default">Find Users</button>
-                    <p>             </p>
-                    <label for="users-display">See which teammates are online</label>
+                    <div class="col-sm-4">
+                        <p><br></p>
+                        <button id="find-users" class="btn btn-default">Find Users</button>
+                        <p>             </p>
+                        <label for="users-display">See which teammates are online</label>
                         <p id="users-display"></p>
+                    </div>
                 </div>
-
-
             </div>
         </div>
 

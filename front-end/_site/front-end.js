@@ -55,19 +55,14 @@ $(function () {
         var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
             return this.value;
         });
-        //document.write(selectedBoxes);
+
         for (index = 0; index < selectedBoxes.length; index++) {
             $("#selected-channel-display").append(
                 $('<div></div>').addClass("col-sm-4").append(
                 $('<br>'),
                 $('<label></label>').html(selectedBoxes[index]),
-                $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", selectedBoxes[index] + "-channel")
-                // $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-refresh").html("Refresh"),
-                // $('<br>'),
-                // $('<br>'),
-                // $('<label></label>').html("Type your message here"),
-                // $('<input type="text" class="form-control">').attr("id", selectedBoxes[index] + "-input"),
-                // $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-button").html("Post Message")
+                $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", selectedBoxes[index] + "-channel"),
+                $('<br>')
                 )
             );
             $("#open-channels").append(
@@ -126,15 +121,11 @@ $(function () {
         });
     });
     
-
-        // var refreshId = "#" + selectedBoxes[index] + "-refresh";
-        // var inputId = "#" + selectedBoxes[index] + "-input";
-        // var postId = "#" + selectedBoxes[index] + "-button";
     $("#refresh-button").click(function () {
         var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
             return this.value;
         });
-        
+
         $.getJSON(
              // URL
             "https://slack.com/api/channels.list",
