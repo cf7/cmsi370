@@ -5,7 +5,7 @@ $(function () {
         "https://slack.com/api/channels.list",
         // parameters
         {
-            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
         }
     ).done(function (result) {
         console.log(result);
@@ -19,7 +19,7 @@ $(function () {
                 '<br>'
                 + '<input type="checkbox" name="channel-checkbox" value='
                 + channelsList[index] + '> ' + channelsList[index]
-                );
+            );
         }
     });
 
@@ -131,7 +131,7 @@ $(function () {
             "https://slack.com/api/channels.list",
             // parameters
             {
-                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
             }
         ).done(function(result) {
             var selectedChannels = new Array(selectedBoxes.length);
@@ -191,7 +191,7 @@ $(function () {
             "https://slack.com/api/channels.list",
             // parameters
             {
-                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
             }
             ).done(function(result) {
                 var selectedChannels = new Array(selectedButtons.length);
@@ -229,19 +229,78 @@ $(function () {
                 }
             });
     });
-
+    
     $("#find-users").click(function () {
         $.getJSON(
             // URL
             "https://slack.com/api/users.list",
             // parameters
             {
-                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
             }
         ).done(function (result) {
             console.log(result);
-            $("#users-display").html("");
-            $("#users-display").append(result["members"][0].name);
+            for (index = 0; index < result["members"].length; index++) {
+                $("#users-display").html("");
+                $("#users-display").append(
+                    '<br>'
+                    + '<input type="radio" name="users-checkbox" value='
+                    + result["members"][index].name + '> ' + result["members"][index].name
+                );
+            }
+        });
+    });
+
+    // $('input[name=users-checkbox]:checked').map( function () {
+    //     return this.value();
+    // });
+    
+    $("#invite-button").click(function () {
+        var selectedButton = $("input[name=open-channel-button]:checked").val();
+        $.getJSON(
+             // URL
+            "https://slack.com/api/channels.list",
+            // parameters
+            {
+                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
+            }
+        ).done(function(result) {
+            var selectedChannel;
+
+            for (index = 0; index < result["channels"].length; index++) {
+                if (result["channels"][index].name == selectedButton) {
+                    selectedChannel = result["channels"][index];
+                }
+            }
+            var selectedUser = $("input[name=users-checkbox]:checked").val();
+            $.getJSON(
+                // URL
+                "https://slack.com/api/users.list",
+                // parameters
+                {
+                    token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
+                }
+            ).done(function (result) {
+                console.log(result);
+                for (index = 0; index < result["members"].length; index++) {
+                    if (result["members"][index].name == selectedUser) {
+                        selectedUser = result["members"][index];
+                    }
+                }
+
+                $.getJSON(
+                    // URL
+                    "https://slack.com/api/channels.invite",
+                    // parameters
+                    {
+                        token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                        channel: selectedChannel["id"],
+                        user: selectedUser["id"]
+                    }
+                ).done(function (result) {
+                    console.log(result);
+                });
+            });
         });
     });
 

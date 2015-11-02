@@ -27,6 +27,7 @@
 
                 <div class="col-sm-12" id="channel-settings-col">
                         <p><br></p>
+                        <blockquote>Fix duplicate textarea bugs from multiple submits</blockquote>
                         <h3>Here are the channels available on this teampage.</h3>
                         <h4 for="channels-displayarea">Select the channels you want to participate in.</h4>
                         <p>(You can select multiple channels to chat in at the same time!)</p>
@@ -41,25 +42,38 @@
                 </div>
 
                 <div class="col-sm-12" id="input-display">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <br>
                         <label for="open-channels">Open Channels (Select which channel to post to)</lable>
                         <p id="open-channels"></p>
                     </div>
 
-                    <div class="col-sm-4" style="background-color:rgb(200,255,100)">
+                    <div class="col-sm-6" style="background-color:rgb(200,255,100)">
                         <label for="post-input">Type your message here</label>
                         <input type="text" class="form-control" id="post-input">
                         <button class="btn btn-default" id="post-button">Post Message</button>
                         <p><br></p>
                     </div>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col-sm-12">
                     <div class="col-sm-4">
                         <p><br></p>
-                        <button id="find-users" class="btn btn-default">Find Users</button>
+                        <label for="find-users">See which teammates are online</label>
                         <p>             </p>
-                        <label for="users-display">See which teammates are online</label>
+                        <button id="find-users" class="btn btn-default">Find Users</button>
+                    </div>
+                    <div class="col-sm-4">
+                        <p><br></p>
                         <p id="users-display"></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p><br></p>
+                        <lable for="invite-button">Invite a teammate to the currently selected channel</label>
+                        <br>
+                        <button class="btn btn-default" id="invite-button">Invite</button>
                     </div>
                 </div>
             </div>
