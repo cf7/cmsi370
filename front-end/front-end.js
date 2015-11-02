@@ -61,15 +61,21 @@ $(function () {
                 $('<div></div>').addClass("col-sm-4").append(
                 $('<br>'),
                 $('<label></label>').html(selectedBoxes[index]),
-                $('<textarea rows="10" class="form-control"></textarea>').attr("id", selectedBoxes[index] + "-channel"),
-                $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-refresh").html("Refresh"),
-                $('<br>'),
-                $('<br>'),
-                $('<label></label>').html("Type your message here"),
-                $('<input type="text" class="form-control">').attr("id", selectedBoxes[index] + "-input"),
-                $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-button").html("Post Message")
+                $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", selectedBoxes[index] + "-channel")
+                // $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-refresh").html("Refresh"),
+                // $('<br>'),
+                // $('<br>'),
+                // $('<label></label>').html("Type your message here"),
+                // $('<input type="text" class="form-control">').attr("id", selectedBoxes[index] + "-input"),
+                // $('<button class="btn btn-default"></button>').attr("id", selectedBoxes[index] + "-button").html("Post Message")
                 )
-            );  
+            );
+            $("#open-channels").append(
+                '<br>'
+                + '<input type="radio" name="open-channel-button" value='
+                + selectedBoxes[index] + '> ' + selectedBoxes[index]
+                );
+                  
         }
         
         $.getJSON(
@@ -90,71 +96,147 @@ $(function () {
                     scIndex++;
                 }
             }
+
             for (index = 0; index < selectedChannels.length; index++) {
                 console.log("outside " + index);
+
                 (function (i) {
-                var id = "#" + selectedChannels[i].name + "-channel";
-                $.getJSON(
-                    // URL
-                    "https://slack.com/api/channels.history",
-                    // parameters
-                    {
-                        token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                        channel: selectedChannels[i]["id"]
-                    }
-                ).done(function (result) {
-                        console.log("inside " + index);
-                        console.log("inside i " + i);
-                        console.log(selectedChannels[i].name);
-                        var chatHistoryString = storeMessages(result);
-                        $(id).html("");
-                        $(id).append(chatHistoryString);
-                        $(id).scrollTop(
-                            $(id).prop("scrollHeight")
-                            );
+                    var id = "#" + selectedChannels[i].name + "-channel";
+                    $.getJSON(
+                        // URL
+                        "https://slack.com/api/channels.history",
+                        // parameters
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: selectedChannels[i]["id"]
+                        }
+                    ).done(function (result) {
+                            console.log("inside " + index);
+                            console.log("inside i " + i);
+                            console.log(selectedChannels[i].name);
+                            var chatHistoryString = storeMessages(result);
+                            $(id).html("");
+                            $(id).append(chatHistoryString);
+                            $(id).scrollTop(
+                                $(id).prop("scrollHeight")
+                                );
                     });
-            })(index);
+                })(index);
             }
         });
     });
+    
 
-
+        // var refreshId = "#" + selectedBoxes[index] + "-refresh";
+        // var inputId = "#" + selectedBoxes[index] + "-input";
+        // var postId = "#" + selectedBoxes[index] + "-button";
     $("#refresh-button").click(function () {
+        var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
+            return this.value;
+        });
+        
         $.getJSON(
-            // URL
-            "https://slack.com/api/channels.history",
+             // URL
+            "https://slack.com/api/channels.list",
             // parameters
             {
                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                channel: selectedChannel["id"]
             }
-        ).done(function (result) {
-            console.log(result);
-            var chatHistoryString = storeMessages(result);
-            $("#posts").val(chatHistoryString);
-            $("#posts").scrollTop($("#posts").prop("scrollHeight"));
-        });
+        ).done(function(result) {
+            var selectedChannels = new Array(selectedBoxes.length);
+            var scIndex = 0;
+
+            for (index = 0; index < result["channels"].length; index++) {
+                if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
+                    selectedChannels[scIndex] = result["channels"][index];
+                    scIndex++;
+                }
+            }
+
+            for (index = 0; index < selectedChannels.length; index++) {
+                (function (i) {
+                    var postId = "#" + selectedChannels[i].name + "-button";
+                    $.getJSON(
+                        // URL
+                        "https://slack.com/api/channels.history",
+                        // parameters
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: selectedChannels[i]["id"]
+                        }
+                    ).done(function (result) {
+                        console.log(result);
+                        var chatHistoryString = storeMessages(result);
+                        $(postId).val(chatHistoryString);
+                        $(postId).scrollTop($(postId).prop("scrollHeight"));
+                    });
+                })(index);
+            }
+        }); 
     });
 
+
+    // var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
+    //         return this.value;
+    // });
+
+    // var selectedChannels = new Array(selectedBoxes.length);
+    // var scIndex = 0;
+
+    // for (index = 0; index < result["channels"].length; index++) {
+    //     if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
+    //         selectedChannels[scIndex] = result["channels"][index];
+    //         scIndex++;
+    //     }
+    // }
+
     $("#post-button").click(function () {
+        var selectedButtons = $("input[name=open-channel-button]:checked").map(function () {
+            return this.value;
+        });
+
         $.getJSON(
-            // URL
-            "https://slack.com/api/chat.postMessage",
-            //parameters
+             // URL
+            "https://slack.com/api/channels.list",
+            // parameters
             {
                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                channel: selectedChannel["id"],
-                text: $("#post-input").val()
             }
-        ).done(function (result) {
-            console.log(result);
-            $("#posts").append( 
-                "\n" + result["message"]["username"] + 
-                ": " + result["message"]["text"]
-                );
-           $("#post-input").val("");
-           $("#posts").scrollTop($("#posts").prop("scrollHeight"));
-        });
+            ).done(function(result) {
+                var selectedChannels = new Array(selectedButtons.length);
+                var scIndex = 0;
+
+                for (index = 0; index < result["channels"].length; index++) {
+                    if ($.inArray(result["channels"][index].name, selectedButtons) > -1) {
+                        selectedChannels[scIndex] = result["channels"][index];
+                        scIndex++;
+                    }
+                }
+
+                for (index = 0; index < selectedChannels.length; index++) {
+                    (function (i) {
+                        var postId = "#" + selectedChannels[i].name + "-channel";
+                        $.getJSON(
+                            // URL
+                            "https://slack.com/api/chat.postMessage",
+                            //parameters
+                            {
+                                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                                channel: selectedChannels[i]["id"],
+                                text: $("#post-input").val()
+                            }
+                        ).done(function (result) {
+                            console.log(result);
+                            $(postId).append( 
+                                "\n" + result["message"]["username"] + 
+                                ": " + result["message"]["text"]
+                                );
+                           $("#post-input").val("");
+                           $(postId).scrollTop($(postId).prop("scrollHeight"));
+                        });
+                    })(index);
+                }
+            });
     });
 
     $("#find-users").click(function () {

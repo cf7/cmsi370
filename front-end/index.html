@@ -29,29 +29,24 @@
                         <p><br></p>
                         <h3>Here are the channels available on this teampage.</h3>
                         <h4 for="channels-displayarea">Select the channels you want to participate in.</h4>
+                        <p>(You can select multiple channels to chat in at the same time!)</p>
                         <fieldset id="channels-displayarea"></fieldset>
                         <p><br></p>
                         <button id="submit-button" class="btn btn-default">Submit</button>
+                        <button id="refresh-button" class="btn btn-default">Refresh</button>
                 </div>
 
                 <div class="col-sm-12" id="selected-channel-display">
 
                 </div>
 
-                <div class="col-sm-12" id="post-display">
+                <div class="col-sm-12" id="input-display">
                     <br>
-                    <div class="col-sm-3" style="background-color:rgb(0,200,200)">
-                        <p><br></p>
-                        <label for="posts">Posts</label>
-                        <textarea class="form-control" rows="10" id="posts"></textarea>
-                        <p><br></p>
-                        <button id="refresh-button" class="btn btn-default">Refresh</button>
-                        <p><br></p>
-                        <label for="post-input">Type your messages here</label>
-                        <input type="text" class="form-control" id="post-input">
-                        <button id="post-button" class="btn btn-default">Post Message</button>
-                        <p><br></p>
-                    </div>
+                    <label for="open-channels">Open Channels</lable>
+                    <p id="open-channels"></p>
+                    <label for="post-input">Type your message here</label>
+                    <input type="text" class="form-control" id="post-input">
+                    <button class="btn btn-default" id="post-button">Post Message</button>
 
                 </div>
 
