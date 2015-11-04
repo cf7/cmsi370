@@ -59,6 +59,7 @@ $(function () {
             $("#settings-status-display").append("* Please select channels to open *");
         } else {
             $("#settings-status-display").html("");
+            $("#refresh-status").html("");
             $("#post-status-display").html("");
             $("#post-status-display").append("Refresh every so often to see new messages");
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
@@ -132,17 +133,17 @@ $(function () {
     
     $("#refresh-button").click(function () {
         if ($("input[name=channel-checkbox]:checked").length == 0) {
-            $("#settings-status-display").html("");
-            $("#settings-status-display").append("* Please select channels to open *");
+            $("#refresh-status").html("");
+            $("#refresh-status").append("* Please submit channels to open *");
         } else if ($.trim($("#selected-channel-display").html()) == "") {
-            $("#settings-status-display").html("");
-            $("#settings-status-display").append("* Submit first *");
+            $("#refresh-status").html("");
+            $("#refresh-status").append("* Submit first *");
         } else {
-            $("#settings-status-display").html("");
+            $("#refresh-status").html("");
             $("#post-status-display").html("");
             $("#post-status-display").append("Refresh every so often to see new messages");
 
-            $("#refresh-status").fadeIn(500).delay(1000).fadeOut();
+            $("#refresh-status-temporary").fadeIn(500).delay(1000).fadeOut();
 
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;

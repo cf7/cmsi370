@@ -27,7 +27,7 @@
 
                 <div class="col-sm-12" id="channel-settings-col">
                         <p><br></p>
-                        <h3>Users can chat with teammates through several channels available on this teampage.</h3>
+                        <h3>Users can chat with teammates using Slack through channels available on this teampage.</h3>
                         <h4>Below are all available channels.</h4>
                         <h4 for="channels-displayarea">To get started, select the channels you want to participate in.</h4>
                         <p>(You can select multiple channels to chat in at the same time!)</p>
@@ -35,12 +35,10 @@
                         <p><br></p>
                         <p>Click "Submit" to open selected channels</p>
                         <button id="submit-button" class="btn btn-default">Submit</button>
-                        <button id="refresh-button" class="btn btn-default">Refresh</button>
-                        <p id="refresh-status" style="display:none">channels refreshed . . .</p>
                         <p id="settings-status-display"></p>
                         <p><br></p>
                 </div>
-                
+
                 <div class="col-sm-12" id="selected-channel-display" style="background-color:rgb(0,120,200)">
 
                 </div>
@@ -49,13 +47,16 @@
                     <div class="col-sm-6">
                         <br>
                         <label for="open-channels">Open Channels (Select which channel to post to)</lable>
-                        <p id="open-channels" style="color:blue"><br>[Select channels to open above]</p>
+                        <p id="open-channels" style="color:blue"><br>[Submit channels to open above]</p>
                     </div>
 
                     <div class="col-sm-6" style="background-color:rgb(250,255,100)">
                         <label for="post-input">Type your message here</label>
                         <input type="text" class="form-control" id="post-input">
                         <button class="btn btn-default" id="post-button">Post Message</button>
+                        <button id="refresh-button" class="btn btn-default">Refresh</button>
+                        <p id="refresh-status"></p>
+                        <p id="refresh-status-temporary" style="display:none">channels refreshed . . .</p>
                         <p id="post-status-display"></p>
                         <p><br></p>
                     </div>
