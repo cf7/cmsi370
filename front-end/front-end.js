@@ -189,19 +189,11 @@ $(function () {
     });
 
 
-    // var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
-    //         return this.value;
-    // });
-
-    // var selectedChannels = new Array(selectedBoxes.length);
-    // var scIndex = 0;
-
-    // for (index = 0; index < result["channels"].length; index++) {
-    //     if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
-    //         selectedChannels[scIndex] = result["channels"][index];
-    //         scIndex++;
-    //     }
-    // }
+    $("#post-input").keypress(function(event) {
+        if (event.keyCode == 13) {
+            $("#post-button").click();
+        }
+    });
 
     $("#post-button").click(function () {
         if ($("input[name=open-channel-button]:checked").length == 0) {
@@ -281,10 +273,6 @@ $(function () {
         });
     });
 
-    // $('input[name=users-checkbox]:checked').map( function () {
-    //     return this.value();
-    // });
-    
     $("#invite-button").click(function () {
         if ($("input[name=open-channel-button]:checked").length == 0) {
             $("#invite-status-display").html("");
