@@ -28,12 +28,14 @@
                 <div class="col-sm-12" id="channel-settings-col">
                         <p><br></p>
                         <h3>Here are the channels available on this teampage.</h3>
-                        <h4 for="channels-displayarea">Select the channels you want to participate in.</h4>
+                        <h4 for="channels-displayarea">To get started, select the channels you want to participate in.</h4>
                         <p>(You can select multiple channels to chat in at the same time!)</p>
                         <fieldset id="channels-displayarea"></fieldset>
                         <p><br></p>
+                        <p>Click "Submit" to open selected channels</p>
                         <button id="submit-button" class="btn btn-default">Submit</button>
                         <button id="refresh-button" class="btn btn-default">Refresh</button>
+                        <p id="settings-status-display"></p>
                         <p><br></p>
                 </div>
                 <div class="col-sm-12" id="selected-channel-display" style="background-color:rgb(0,120,200)">
@@ -44,13 +46,14 @@
                     <div class="col-sm-6">
                         <br>
                         <label for="open-channels">Open Channels (Select which channel to post to)</lable>
-                        <p id="open-channels"></p>
+                        <p id="open-channels"><br>[Select channels to open above]</p>
                     </div>
 
-                    <div class="col-sm-6" style="background-color:rgb(200,255,100)">
+                    <div class="col-sm-6" style="background-color:rgb(250,255,100)">
                         <label for="post-input">Type your message here</label>
                         <input type="text" class="form-control" id="post-input">
                         <button class="btn btn-default" id="post-button">Post Message</button>
+                        <p id="post-status-display"></p>
                         <p><br></p>
                     </div>
                 </div>
@@ -63,6 +66,7 @@
                         <label for="find-users">See which teammates are online</label>
                         <p>             </p>
                         <button id="find-users" class="btn btn-default">Find Users</button>
+                        <p><br></p>
                     </div>
                     <div class="col-sm-4">
                         <p><br></p>
@@ -73,9 +77,15 @@
                         <lable for="invite-button">Invite a teammate to the currently selected channel</label>
                         <br>
                         <button class="btn btn-default" id="invite-button">Invite</button>
+                        <p id="invite-status-display"></p>
+                        <p><br></p>
                     </div>
                 </div>
             </div>
+
+            <footer class="footer" style="background-color:rgb(0,100,255)">
+                <p><br><br><br></p>
+            </footer>
         </div>
 
         <!-- Script elements ideally go at the bottome of the body. -->
