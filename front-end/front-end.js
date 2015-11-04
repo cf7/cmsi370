@@ -281,7 +281,7 @@ $(function () {
             $("#invite-status-display").append("* Please select an open channel to invite to *");
         } else if ($.trim($("#users-display").html()) == "") {
             $("#invite-status-display").html("");
-            $("#invite-status-display").append('* Click "Find Users" to see teammates who are online *');
+            $("#invite-status-display").append('* Click "Find Users" to see a list of teammates *');
         } else if ($("input[name=users-checkbox]:checked").length == 0) {
             $("#invite-status-display").html("");
             $("#invite-status-display").append("* Please select a teammate to invite *");
