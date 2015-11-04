@@ -66,8 +66,8 @@ $(function () {
             });
             $("#selected-channel-display").html("");
             $("#open-channels").html("");
-            $("html, body").animate({scrollTop: 500}, 2000);
-            
+            $("html, body").animate({scrollTop: 500}, 1000);
+
             for (index = 0; index < selectedBoxes.length; index++) {
                 $("#selected-channel-display").append(
                     $('<div></div>').addClass("col-sm-4").append(
