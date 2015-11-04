@@ -277,8 +277,8 @@ $(function () {
                 console.log(index)
                 $("#users-display").append(
                     '<br>'
-                    + '<input type="radio" name="users-checkbox" value='
-                    + result["members"][index].name + '> ' + result["members"][index].name
+                    + '<label><input type="radio" name="users-checkbox" value='
+                    + result["members"][index].name + '> ' + result["members"][index].name + '</label>'
                 );
             }
         });
