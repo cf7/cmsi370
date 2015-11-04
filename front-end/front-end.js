@@ -33,7 +33,6 @@ $(function () {
 
     var identifyUser = function (message) {
         if ("user" in message && message["user"] != undefined) {
-            var name = "";
             $.getJSON(
                 // URL
                 "https://slack.com/api/users.info",
@@ -44,9 +43,10 @@ $(function () {
                 }
             ).done(function (result) {
                 console.log(result);
-                name = result["user"]["name"];
+                console.log(result["user"]["name"]);
+                $("#storage").html(result["user"]["name"].toString());
             });
-            return name;
+            return $("#storage").html();
         } else {
             return "bot"
         }
@@ -104,8 +104,6 @@ $(function () {
                 }
 
                 for (index = 0; index < selectedChannels.length; index++) {
-                    console.log("outside " + index);
-
                     (function (i) {
                         var id = "#" + selectedChannels[i].name + "-channel";
                         $.getJSON(
@@ -274,7 +272,6 @@ $(function () {
             console.log(result);
             $("#users-display").html("");
             for (index = 0; index < result["members"].length; index++) {
-                console.log(index)
                 $("#users-display").append(
                     '<br>'
                     + '<label><input type="radio" name="users-checkbox" value='
