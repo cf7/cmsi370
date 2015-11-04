@@ -136,13 +136,13 @@ $(function () {
         } else if ($.trim($("#selected-channel-display").html()) == "") {
             $("#settings-status-display").html("");
             $("#settings-status-display").append("* Submit first *");
-        } else if ($("input[name=open-channel-button]:checked").length == 0) {     
-            $("#settings-status-display").html("");
-            $("#settings-status-display").append("* Select an open channel *");
         } else {
             $("#settings-status-display").html("");
             $("#post-status-display").html("");
             $("#post-status-display").append("Refresh every so often to see new messages");
+
+            $("#refresh-status").fadeIn(500).delay(1000).fadeOut();
+
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
             });
