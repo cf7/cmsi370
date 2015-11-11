@@ -1,6 +1,6 @@
-<!doctype html>
+<!doctype html> <!-- JD: 1 -->
 <html>
-    <head>
+    <head> <!-- JD: 2 -->
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,10 +15,10 @@
         <div class="container">
             <div class="row">
 
-                <div class="col-sm-12" style="background-color:rgb(0,100,255)">
+                <div class="col-sm-12" style="background-color:rgb(0,100,255)"> <!-- JD: 3 -->
                     <div class="page-header">
                     <br>
-                    <h1 style="color:white">Welcome to the CMSI370 FrontEndProject!<br>
+                    <h1 style="color:white">Welcome to the CMSI370 FrontEndProject!<br> <!-- JD: 3 -->
                         <small style="color:white">Check out this team page on Slack at cmsi370project.slack.com</small>
                     </h1>
                     <br>
@@ -39,24 +39,24 @@
                         <p><br></p>
                 </div>
 
-                <div class="col-sm-12" id="selected-channel-display" style="background-color:rgb(0,120,200)">
+                <div class="col-sm-12" id="selected-channel-display" style="background-color:rgb(0,120,200)"> <!-- JD: 3 -->
 
                 </div>
 
                 <div class="col-sm-12" id="input-display">
                     <div class="col-sm-6">
                         <br>
-                        <label for="open-channels">Open Channels (Select which channel to post to)</lable>
-                        <p id="open-channels" style="color:blue"><br>[Submit channels to open above]</p>
+                        <label for="open-channels">Open Channels (Select which channel to post to)</lable> <!-- JD: 4 -->
+                        <p id="open-channels" style="color:blue"><br>[Submit channels to open above]</p> <!-- JD: 3 -->
                     </div>
 
-                    <div class="col-sm-6" style="background-color:rgb(250,255,100)">
+                    <div class="col-sm-6" style="background-color:rgb(250,255,100)"> <!-- JD: 3 -->
                         <label for="post-input">Type your message here</label>
                         <input type="text" class="form-control" id="post-input">
                         <button class="btn btn-default" id="post-button">Post Message</button>
                         <button id="refresh-button" class="btn btn-default">Refresh Channels</button>
                         <p id="refresh-status"></p>
-                        <p id="refresh-status-temporary" style="display:none">channels refreshed . . .</p>
+                        <p id="refresh-status-temporary" style="display:none">channels refreshed . . .</p> <!-- JD: 3, 5 -->
                         <p id="post-status-display"></p>
                         <p><br></p>
                     </div>
@@ -87,11 +87,11 @@
                 </div>
             </div>
 
-            <footer class="footer" style="background-color:rgb(0,100,255)">
+            <footer class="footer" style="background-color:rgb(0,100,255)"> <!-- JD: 3 -->
                 <p><br><br><br></p>
             </footer>
 
-            <p id="storage" style="display:none"></p>
+            <p id="storage" style="display:none"></p> <!-- JD: 5 -->
 
         </div>
 

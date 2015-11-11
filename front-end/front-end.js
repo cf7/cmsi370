@@ -1,20 +1,20 @@
 $(function () {
 
     $.getJSON(
-        // URL
+        // URL // JD: 6
         "https://slack.com/api/channels.list",
-        // parameters
+        // parameters // JD: 6
         {
             token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
         }
     ).done(function (result) {
         console.log(result);
-        var channelsList = new Array(result["channels"].length);
-        for (index = 0; index < result["channels"].length; index++) {
+        var channelsList = new Array(result["channels"].length); // JD: 7
+        for (index = 0; index < result["channels"].length; index++) { // JD: 8
             channelsList[index] = result["channels"][index].name;
         }
         $("#channels-displayarea").html(""); // .val("") wasn't working for some reason
-        for (index = 0; index < channelsList.length; index++) {
+        for (index = 0; index < channelsList.length; index++) { // JD: 8
             $("#channels-displayarea").append(
                 '<br>'
                 + '<label><input type="checkbox" name="channel-checkbox" value='
@@ -25,18 +25,19 @@ $(function () {
 
     var storeMessages = function (result) { //used for submit-button and refresh-button
         var chatHistoryString = "";
-        for (index = 0; index < result["messages"].length; index++) {
+        for (index = 0; index < result["messages"].length; index++) { // JD: 9
+            // JD: 10
             chatHistoryString = identifyUser(result["messages"][index]) + ": " + result["messages"][index].text + "\n" + chatHistoryString;
         }
         return chatHistoryString;
     }
 
     var identifyUser = function (message) {
-        if ("user" in message && message["user"] != undefined) {
+        if ("user" in message && message["user"] != undefined) { // JD: 10
             $.getJSON(
-                // URL
+                // URL // JD: 6
                 "https://slack.com/api/users.info",
-                //parameters
+                //parameters // JD: 6
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                     user: message["user"]
@@ -44,7 +45,7 @@ $(function () {
             ).done(function (result) {
                 console.log(result);
                 console.log(result["user"]["name"]);
-                $("#storage").html(result["user"]["name"].toString());
+                $("#storage").html(result["user"]["name"].toString()); // JD: 12
             });
             return $("#storage").html();
         } else {
@@ -54,18 +55,18 @@ $(function () {
 
 
     $("#submit-button").click(function () {
-        if ($("input[name=channel-checkbox]:checked").length == 0) {
-            $("#settings-status-display").html("");
-            $("#settings-status-display").append("* Please select channels to open *");
+        if ($("input[name=channel-checkbox]:checked").length == 0) { // JD: 10
+            $("#settings-status-display").html(""); // JD: 13
+            $("#settings-status-display").append("* Please select channels to open *"); // JD: 14
         } else {
             $("#settings-status-display").html("");
             $("#refresh-status").html("");
-            $("#post-status-display").html("");
+            $("#post-status-display").html(""); // JD: 15
             $("#post-status-display").append("Refresh every so often to see new messages");
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
             });
-            $("#selected-channel-display").html("");
+            $("#selected-channel-display").html(""); // JD: 13, 15
             $("#open-channels").html("");
             $("html, body").animate({scrollTop: 500}, 1000);
 
@@ -87,13 +88,14 @@ $(function () {
             }
             
             $.getJSON(
-                // URL
+                // URL // JD: 6
                 "https://slack.com/api/channels.list",
-                // parameters
+                // parameters // JD: 6
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                 }
             ).done(function (result) {
+                // JD: 16
                 console.log(result);
                 var selectedChannels = new Array(selectedBoxes.length);
                 var scIndex = 0;
@@ -117,25 +119,25 @@ $(function () {
                                 channel: selectedChannels[i]["id"]
                             }
                         ).done(function (result) {
-                                console.log(result)
+                                console.log(result) // JD: 17
                                 var chatHistoryString = storeMessages(result);
                                 $(id).html("");
-                                $(id).append(chatHistoryString);
+                                $(id).append(chatHistoryString); // JD: 14
                                 $(id).scrollTop(
                                     $(id).prop("scrollHeight")
                                     );
                         });
-                    })(index);
+                    })(index); // JD: 18
                 }
             });
         }
     });
     
     $("#refresh-button").click(function () {
-        if ($("input[name=channel-checkbox]:checked").length == 0) {
+        if ($("input[name=channel-checkbox]:checked").length == 0) { // JD: 10
             $("#refresh-status").html("");
             $("#refresh-status").append("* Please submit channels to open *");
-        } else if ($.trim($("#selected-channel-display").html()) == "") {
+        } else if ($.trim($("#selected-channel-display").html()) == "") { // JD: 10
             $("#refresh-status").html("");
             $("#refresh-status").append("* Submit first *");
         } else {
@@ -143,7 +145,7 @@ $(function () {
             $("#post-status-display").html("");
             $("#post-status-display").append("Refresh every so often to see new messages");
 
-            $("#refresh-status-temporary").fadeIn(500).delay(1000).fadeOut();
+            $("#refresh-status-temporary").fadeIn(500).delay(1000).fadeOut(); // JD: 19
 
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
@@ -311,7 +313,7 @@ $(function () {
                         {
                             token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                         }
-                    ).done(function (result) {
+                    ).done(function (result) { // JD: 20
                         console.log(result);
                         for (index = 0; index < result["members"].length; index++) {
                             if (result["members"][index].name == selectedUser) {
