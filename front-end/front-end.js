@@ -13,7 +13,7 @@ $(function () {
         for (index = 0; index < result["channels"].length; index++) { // JD: 8
             channelsList[index] = result["channels"][index].name;
         }
-        $("#channels-displayarea").html(""); // .val("") wasn't working for some reason
+        $("#channels-displayarea").empty(); // .val("") wasn't working for some reason
         for (index = 0; index < channelsList.length; index++) { // JD: 8
             $("#channels-displayarea").append(
                 '<br>'
@@ -56,18 +56,16 @@ $(function () {
 
     $("#submit-button").click(function () {
         if ($("input[name=channel-checkbox]:checked").length === 0) { // JD: 10
-            $("#settings-status-display").html(""); // JD: 13
-            $("#settings-status-display").append("* Please select channels to open *"); // JD: 14
+            $("#settings-status-display")
+                .empty() // JD: 13
+                .append("* Please select channels to open *"); // JD: 14
         } else {
-            $("#settings-status-display").html("");
-            $("#refresh-status").html("");
-            $("#post-status-display").html(""); // JD: 15
+            $("#settings-status-display, #refresh-status, #post-status-display").empty(); // JD: 15
             $("#post-status-display").append("Refresh every so often to see new messages");
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
             });
-            $("#selected-channel-display").html(""); // JD: 13, 15
-            $("#open-channels").html("");
+            $("#selected-channel-display, #open-channels").empty(); // JD: 13, 15
             $("html, body").animate({scrollTop: 500}, 1000);
 
             for (index = 0; index < selectedBoxes.length; index++) {
@@ -119,13 +117,14 @@ $(function () {
                                 channel: selectedChannels[i]["id"]
                             }
                         ).done(function (result) {
-                                console.log(result) // JD: 17
-                                var chatHistoryString = storeMessages(result);
-                                $(id).html("");
-                                $(id).append(chatHistoryString); // JD: 14
-                                $(id).scrollTop(
-                                    $(id).prop("scrollHeight")
-                                    );
+                            console.log(result) // JD: 17
+                            var chatHistoryString = storeMessages(result);
+                            $(id)
+                                .empty()
+                                .append(chatHistoryString); // JD: 14
+                            $(id).scrollTop(
+                                $(id).prop("scrollHeight")
+                                );
                         });
                     })(index); // JD: 18
                 }
@@ -135,15 +134,18 @@ $(function () {
     
     $("#refresh-button").click(function () {
         if ($("input[name=channel-checkbox]:checked").length === 0) { // JD: 10
-            $("#refresh-status").html("");
-            $("#refresh-status").append("* Please submit channels to open *");
+            $("#refresh-status")
+                .empty()
+                .append("* Please submit channels to open *");
         } else if ($.trim($("#selected-channel-display").html()) === "") { // JD: 10
-            $("#refresh-status").html("");
-            $("#refresh-status").append("* Submit first *");
+            $("#refresh-status")
+                .empty()
+                .append("* Submit first *");
         } else {
-            $("#refresh-status").html("");
-            $("#post-status-display").html("");
-            $("#post-status-display").append("Refresh every so often to see new messages");
+            $("#refresh-status").empty();
+            $("#post-status-display")
+                .empty()
+                .append("Refresh every so often to see new messages");
 
             $("#refresh-status-temporary").fadeIn(500).delay(1000).fadeOut(); // JD: 19
 
@@ -201,11 +203,13 @@ $(function () {
 
     $("#post-button").click(function () {
         if ($("input[name=open-channel-button]:checked").length == 0) {
-            $("#post-status-display").html("");
-            $("#post-status-display").append("* Please select an open channel to post to *");
+            $("#post-status-display")
+                .empty()
+                .append("* Please select an open channel to post to *");
         } else {
-            $("#post-status-display").html("");
-            $("#post-status-display").append("Refresh every so often to see new messages");
+            $("#post-status-display")
+                .empty()
+                .append("Refresh every so often to see new messages");
 
             var selectedButtons = $("input[name=open-channel-button]:checked").map(function () {
                 return this.value;
@@ -266,7 +270,7 @@ $(function () {
             }
         ).done(function (result) {
             console.log(result);
-            $("#users-display").html("");
+            $("#users-display").empty();
             for (index = 0; index < result["members"].length; index++) {
                 $("#users-display").append(
                     '<br>'
@@ -279,16 +283,19 @@ $(function () {
 
     $("#invite-button").click(function () {
         if ($("input[name=open-channel-button]:checked").length == 0) {
-            $("#invite-status-display").html("");
-            $("#invite-status-display").append("* Please select an open channel to invite to *");
+            $("#invite-status-display")
+                .empty()
+                .append("* Please select an open channel to invite to *");
         } else if ($.trim($("#users-display").html()) == "") {
-            $("#invite-status-display").html("");
-            $("#invite-status-display").append('* Click "Find Users" to see a list of teammates *');
+            $("#invite-status-display")
+                .empty()
+                .append('* Click "Find Users" to see a list of teammates *');
         } else if ($("input[name=users-checkbox]:checked").length == 0) {
-            $("#invite-status-display").html("");
-            $("#invite-status-display").append("* Please select a teammate to invite *");
+            $("#invite-status-display")
+                .empty()
+                .append("* Please select a teammate to invite *");
         } else {
-            $("#invite-status-display").html("");
+            $("#invite-status-display").empty();
             var selectedButton = $("input[name=open-channel-button]:checked").val();
                 $.getJSON(
                     
@@ -336,11 +343,13 @@ $(function () {
                                 console.log(result);
                                 if (!result["ok"]) {
                                     if (result["error"] == "cant_invite_self") {
-                                        $("#invite-status-display").html("");
-                                        $("#invite-status-display").html("Users cannot invite themselves.");
+                                        $("#invite-status-display")
+                                            .empty()
+                                            .html("Users cannot invite themselves.");
                                     } else if (result["error"] == "already_in_channel") {
-                                        $("#invite-status-display").html("");
-                                        $("#invite-status-display").html("This user is already in the channel.");
+                                        $("#invite-status-display")
+                                            .empty()
+                                            .html("This user is already in the channel.");
                                     }
                                 } else {
                                     $("#invite-display").append(
