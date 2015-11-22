@@ -1,9 +1,9 @@
 $(function () {
 
     $.getJSON(
-        // URL // JD: 6
+        // JD: 6
         "https://slack.com/api/channels.list",
-        // parameters // JD: 6
+        // JD: 6
         {
             token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
         }
@@ -33,11 +33,11 @@ $(function () {
     }
 
     var identifyUser = function (message) {
-        if ("user" in message && message["user"] != undefined) { // JD: 10
+        if ("user" in message && message["user"] !== undefined) { // JD: 10
             $.getJSON(
-                // URL // JD: 6
+                // JD: 6
                 "https://slack.com/api/users.info",
-                //parameters // JD: 6
+                // JD: 6
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                     user: message["user"]
@@ -55,7 +55,7 @@ $(function () {
 
 
     $("#submit-button").click(function () {
-        if ($("input[name=channel-checkbox]:checked").length == 0) { // JD: 10
+        if ($("input[name=channel-checkbox]:checked").length === 0) { // JD: 10
             $("#settings-status-display").html(""); // JD: 13
             $("#settings-status-display").append("* Please select channels to open *"); // JD: 14
         } else {
@@ -88,9 +88,9 @@ $(function () {
             }
             
             $.getJSON(
-                // URL // JD: 6
+                // JD: 6
                 "https://slack.com/api/channels.list",
-                // parameters // JD: 6
+                // JD: 6
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                 }
@@ -111,9 +111,9 @@ $(function () {
                     (function (i) {
                         var id = "#" + selectedChannels[i].name + "-channel";
                         $.getJSON(
-                            // URL
+                            
                             "https://slack.com/api/channels.history",
-                            // parameters
+                            
                             {
                                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                                 channel: selectedChannels[i]["id"]
@@ -134,10 +134,10 @@ $(function () {
     });
     
     $("#refresh-button").click(function () {
-        if ($("input[name=channel-checkbox]:checked").length == 0) { // JD: 10
+        if ($("input[name=channel-checkbox]:checked").length === 0) { // JD: 10
             $("#refresh-status").html("");
             $("#refresh-status").append("* Please submit channels to open *");
-        } else if ($.trim($("#selected-channel-display").html()) == "") { // JD: 10
+        } else if ($.trim($("#selected-channel-display").html()) === "") { // JD: 10
             $("#refresh-status").html("");
             $("#refresh-status").append("* Submit first *");
         } else {
@@ -152,9 +152,9 @@ $(function () {
             });
 
             $.getJSON(
-                 // URL
+                
                 "https://slack.com/api/channels.list",
-                // parameters
+                
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                 }
@@ -173,9 +173,9 @@ $(function () {
                     (function (i) {
                         var postId = "#" + selectedChannels[i].name + "-button";
                         $.getJSON(
-                            // URL
+                            
                             "https://slack.com/api/channels.history",
-                            // parameters
+                            
                             {
                                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                                 channel: selectedChannels[i]["id"]
@@ -212,9 +212,9 @@ $(function () {
             });
 
             $.getJSON(
-                 // URL
+                
                 "https://slack.com/api/channels.list",
-                // parameters
+                
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                 }
@@ -233,9 +233,9 @@ $(function () {
                         (function (i) {
                             var postId = "#" + selectedChannels[i].name + "-channel";
                             $.getJSON(
-                                // URL
+                                
                                 "https://slack.com/api/chat.postMessage",
-                                //parameters
+                                
                                 {
                                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                                     channel: selectedChannels[i]["id"],
@@ -258,9 +258,9 @@ $(function () {
     
     $("#find-users").click(function () {
         $.getJSON(
-            // URL
+            
             "https://slack.com/api/users.list",
-            // parameters
+            
             {
                 token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
             }
@@ -291,9 +291,9 @@ $(function () {
             $("#invite-status-display").html("");
             var selectedButton = $("input[name=open-channel-button]:checked").val();
                 $.getJSON(
-                     // URL
+                    
                     "https://slack.com/api/channels.list",
-                    // parameters
+                    
                     {
                         token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                     }
@@ -307,9 +307,9 @@ $(function () {
                     }
                     var selectedUser = $("input[name=users-checkbox]:checked").val();
                     $.getJSON(
-                        // URL
+                        
                         "https://slack.com/api/users.list",
-                        // parameters
+                        
                         {
                             token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                         }
@@ -324,9 +324,9 @@ $(function () {
                             alert("Please select an Open Channel to invite to.");
                         } else {
                             $.getJSON(
-                                // URL
+                                
                                 "https://slack.com/api/channels.invite",
-                                // parameters
+                                
                                 {
                                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
                                     channel: selectedChannel["id"],
