@@ -147,8 +147,10 @@ $(function () {
                 .empty()
                 .append("Refresh every so often to see new messages");
 
-            $("#refresh-status-temporary").fadeIn(500).delay(1000).fadeOut(); // JD: 19
-
+            $("#refresh-status-temporary")
+                .show() // JD: 19
+                .hide();
+                
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
             });
