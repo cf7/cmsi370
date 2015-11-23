@@ -9,25 +9,28 @@ $(function () {
         }
     ).done(function (result) {
         console.log(result);
-        var channelsList = new Array(result["channels"].length); // JD: 7
-        for (index = 0; index < result["channels"].length; index++) { // JD: 8
-            channelsList[index] = result["channels"][index].name;
-        }
-        $("#channels-displayarea").empty(); // .val("") wasn't working for some reason
-        for (index = 0; index < channelsList.length; index++) { // JD: 8
+        // JD: 7
+        var channelsList = result["channels"].map(function (channel) { // JD: 8
+            return channel.name;
+        });
+
+        $("#channels-displayarea").empty();
+
+        channelsList.map(function (channel) { // JD: 8
             $("#channels-displayarea").append(
                 '<br>'
                 + '<label><input type="checkbox" name="channel-checkbox" value='
-                + channelsList[index] + '> ' + channelsList[index] + '</label>'
+                + channel + '> ' + channel + '</label>'
             );
-        }
+        });
     });
 
     var storeMessages = function (result) { //used for submit-button and refresh-button
         var chatHistoryString = "";
         for (index = 0; index < result["messages"].length; index++) { // JD: 9
-            // JD: 10
-            chatHistoryString = identifyUser(result["messages"][index]) + ": " + result["messages"][index].text + "\n" + chatHistoryString;
+            // JD: 10 (Was this supposed to be JD: 11 ?)
+            chatHistoryString = identifyUser(result["messages"][index]) 
+                                + ": " + result["messages"][index].text + "\n" + chatHistoryString;
         }
         return chatHistoryString;
     }
@@ -45,7 +48,7 @@ $(function () {
             ).done(function (result) {
                 console.log(result);
                 console.log(result["user"]["name"]);
-                $("#storage").html(result["user"]["name"].toString()); // JD: 12
+                $("#storage").html(result["user"]["name"]); // JD: 12
             });
             return $("#storage").html();
         } else {
@@ -73,7 +76,8 @@ $(function () {
                     $('<div></div>').addClass("col-sm-4").append(
                     $('<br>'),
                     $('<label></label>').html(selectedBoxes[index]),
-                    $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", selectedBoxes[index] + "-channel"),
+                    $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", 
+                        selectedBoxes[index] + "-channel"),
                     $('<br>')
                     )
                 );
@@ -353,7 +357,8 @@ $(function () {
                                     }
                                 } else {
                                     $("#invite-display").append(
-                                        $("<p></p>").html(selectedUser["name"] + " has been invited to " + result["channel"]["name"])
+                                        $("<p></p>").html(selectedUser["name"] 
+                                            + " has been invited to " + result["channel"]["name"])
                                     );
                                 }
                             });
