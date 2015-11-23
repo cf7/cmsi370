@@ -27,11 +27,11 @@ $(function () {
 
     var storeMessages = function (result) { //used for submit-button and refresh-button
         var chatHistoryString = "";
-        for (index = 0; index < result["messages"].length; index++) { // JD: 9
+        result["messages"].map(function (message) { // JD: 9 //reduce as in "reduce code" right?
             // JD: 10 (Was this supposed to be JD: 11 ?)
-            chatHistoryString = identifyUser(result["messages"][index]) 
-                                + ": " + result["messages"][index].text + "\n" + chatHistoryString;
-        }
+            chatHistoryString = identifyUser(message) 
+                                + ": " + message.text + "\n" + chatHistoryString;
+        });
         return chatHistoryString;
     }
 
@@ -52,7 +52,7 @@ $(function () {
             });
             return $("#storage").html();
         } else {
-            return "bot"
+            return "bot";
         }
     }
 
@@ -65,29 +65,31 @@ $(function () {
         } else {
             $("#settings-status-display, #refresh-status, #post-status-display").empty(); // JD: 15
             $("#post-status-display").append("Refresh every so often to see new messages");
+
             var selectedBoxes = $("input[name=channel-checkbox]:checked").map(function () {
                 return this.value;
             });
+
             $("#selected-channel-display, #open-channels").empty(); // JD: 13, 15
             $("html, body").animate({scrollTop: 500}, 1000);
 
-            for (index = 0; index < selectedBoxes.length; index++) {
+            $.map(selectedBoxes, function (selectedBox) {
                 $("#selected-channel-display").append(
                     $('<div></div>').addClass("col-sm-4").append(
                     $('<br>'),
-                    $('<label></label>').html(selectedBoxes[index]),
+                    $('<label></label>').html(selectedBox),
                     $('<textarea rows="10" class="form-control" name="channel-textarea"></textarea>').attr("id", 
-                        selectedBoxes[index] + "-channel"),
+                        selectedBox + "-channel"),
                     $('<br>')
                     )
                 );
                 $("#open-channels").append(
                     '<br>'
                     + '<label><input type="radio" name="open-channel-button" value='
-                    + selectedBoxes[index] + '> ' + selectedBoxes[index] + '</label>'
+                    + selectedBox + '> ' + selectedBox + '</label>'
                     );
                       
-            }
+            });
             
             $.getJSON(
                 // JD: 6
@@ -99,39 +101,33 @@ $(function () {
             ).done(function (result) {
                 // JD: 16
                 console.log(result);
-                var selectedChannels = new Array(selectedBoxes.length);
-                var scIndex = 0;
-
-                for (index = 0; index < result["channels"].length; index++) {
-                    if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
-                        selectedChannels[scIndex] = result["channels"][index];
-                        scIndex++;
+                var selectedChannels = $.map(result["channels"], function (channel) {
+                    if ($.inArray(channel.name, selectedBoxes) > -1) {
+                        return channel;
                     }
-                }
+                });
 
-                for (index = 0; index < selectedChannels.length; index++) {
-                    (function (i) {
-                        var id = "#" + selectedChannels[i].name + "-channel";
-                        $.getJSON(
-                            
-                            "https://slack.com/api/channels.history",
-                            
-                            {
-                                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                                channel: selectedChannels[i]["id"]
-                            }
-                        ).done(function (result) {
-                            console.log(result) // JD: 17
-                            var chatHistoryString = storeMessages(result);
-                            $(id)
-                                .empty()
-                                .append(chatHistoryString); // JD: 14
-                            $(id).scrollTop(
-                                $(id).prop("scrollHeight")
-                                );
-                        });
-                    })(index); // JD: 18
-                }
+                selectedChannels.forEach(function (channel) {
+                    var id = "#" + channel.name + "-channel";
+                    $.getJSON(
+                        
+                        "https://slack.com/api/channels.history",
+                        
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: channel["id"]
+                        }
+                    ).done(function (result) {
+                        console.log(result) // JD: 17
+                        var chatHistoryString = storeMessages(result);
+                        $(id)
+                            .empty()
+                            .append(chatHistoryString); // JD: 14
+                        $(id).scrollTop(
+                            $(id).prop("scrollHeight")
+                            );
+                    });
+                }); // JD: 18 
             });
         }
     });
@@ -165,48 +161,43 @@ $(function () {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                 }
             ).done(function(result) {
-                var selectedChannels = new Array(selectedBoxes.length);
-                var scIndex = 0;
-
-                for (index = 0; index < result["channels"].length; index++) {
-                    if ($.inArray(result["channels"][index].name, selectedBoxes) > -1) {
-                        selectedChannels[scIndex] = result["channels"][index];
-                        scIndex++;
+                var selectedChannels = $.map(result["channels"], function (channel) {
+                    if ($.inArray(channel.name, selectedBoxes) > -1) {
+                        return channel;
                     }
-                }
+                });
 
-                for (index = 0; index < selectedChannels.length; index++) {
-                    (function (i) {
-                        var postId = "#" + selectedChannels[i].name + "-button";
-                        $.getJSON(
-                            
-                            "https://slack.com/api/channels.history",
-                            
-                            {
-                                token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                                channel: selectedChannels[i]["id"]
-                            }
-                        ).done(function (result) {
-                            console.log(result);
-                            var chatHistoryString = storeMessages(result);
-                            $(postId).val(chatHistoryString);
-                            $(postId).scrollTop($(postId).prop("scrollHeight"));
-                        });
-                    })(index);
-                }
+                selectedChannels.forEach(function (channel) {
+                    var postId = "#" + channel.name + "-button";
+                    $.getJSON(
+                        
+                        "https://slack.com/api/channels.history",
+                        
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: channel["id"]
+                        }
+                    ).done(function (result) {
+                        console.log(result);
+                        var chatHistoryString = storeMessages(result);
+                        $(postId)
+                            .val(chatHistoryString)
+                            .scrollTop($(postId).prop("scrollHeight"));
+                    });
+                });
             }); 
         }
     });
 
 
     $("#post-input").keypress(function(event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#post-button").click();
         }
     });
 
     $("#post-button").click(function () {
-        if ($("input[name=open-channel-button]:checked").length == 0) {
+        if ($("input[name=open-channel-button]:checked").length === 0) {
             $("#post-status-display")
                 .empty()
                 .append("* Please select an open channel to post to *");
@@ -226,44 +217,37 @@ $(function () {
                 {
                     token: "xoxp-13367929653-13369664679-13372846530-65fb442f55"
                 }
-                ).done(function(result) {
-                    var selectedChannels = new Array(selectedButtons.length);
-                    var scIndex = 0;
+            ).done(function(result) {
 
-                    for (index = 0; index < result["channels"].length; index++) {
-                        if ($.inArray(result["channels"][index].name, selectedButtons) > -1) {
-                            selectedChannels[scIndex] = result["channels"][index];
-                            scIndex++;
-                        }
-                    }
-
-                    for (index = 0; index < selectedChannels.length; index++) {
-                        (function (i) {
-                            var postId = "#" + selectedChannels[i].name + "-channel";
-                            $.getJSON(
-                                
-                                "https://slack.com/api/chat.postMessage",
-                                
-                                {
-                                    token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
-                                    channel: selectedChannels[i]["id"],
-                                    text: $("#post-input").val()
-                                }
-                            ).done(function (result) {
-                                console.log(result);
-                                $(postId).append( 
-                                    "\n" + result["message"]["username"] + 
-                                    ": " + result["message"]["text"]
-                                    );
-                               $("#post-input").val("");
-                               $(postId).scrollTop($(postId).prop("scrollHeight"));
-                            });
-                        })(index);
+                var selectedChannels = $.map(result["channels"], function (channel) {
+                    if ($.inArray(channel.name, selectedButtons) > -1) {
+                        return channel;
                     }
                 });
+            
+                selectedChannels.forEach(function (channel) {
+                    var postId = "#" + channel.name + "-channel";
+                    $.getJSON(
+                        
+                        "https://slack.com/api/chat.postMessage",
+                        
+                        {
+                            token: "xoxp-13367929653-13369664679-13372846530-65fb442f55",
+                            channel: channel["id"],
+                            text: $("#post-input").val()
+                        }
+                    ).done(function (result) {
+                        console.log(result);
+                        $(postId)
+                            .append("\n" + result["message"]["username"] + ": " + result["message"]["text"])
+                            .scrollTop($(postId).prop("scrollHeight"));
+                        $("#post-input").val("");
+                    });
+                });
+            });
         }
     });
-    
+
     $("#find-users").click(function () {
         $.getJSON(
             
@@ -275,26 +259,26 @@ $(function () {
         ).done(function (result) {
             console.log(result);
             $("#users-display").empty();
-            for (index = 0; index < result["members"].length; index++) {
+            result["members"].forEach(function (member) {
                 $("#users-display").append(
                     '<br>'
                     + '<label><input type="radio" name="users-checkbox" value='
-                    + result["members"][index].name + '> ' + result["members"][index].name + '</label>'
+                    + member.name + '> ' + member.name + '</label>'
                 );
-            }
+            });
         });
     });
 
     $("#invite-button").click(function () {
-        if ($("input[name=open-channel-button]:checked").length == 0) {
+        if ($("input[name=open-channel-button]:checked").length === 0) {
             $("#invite-status-display")
                 .empty()
                 .append("* Please select an open channel to invite to *");
-        } else if ($.trim($("#users-display").html()) == "") {
+        } else if ($.trim($("#users-display").html()) === "") {
             $("#invite-status-display")
                 .empty()
                 .append('* Click "Find Users" to see a list of teammates *');
-        } else if ($("input[name=users-checkbox]:checked").length == 0) {
+        } else if ($("input[name=users-checkbox]:checked").length === 0) {
             $("#invite-status-display")
                 .empty()
                 .append("* Please select a teammate to invite *");
@@ -311,11 +295,11 @@ $(function () {
                 ).done(function(result) {
                     var selectedChannel;
 
-                    for (index = 0; index < result["channels"].length; index++) {
-                        if (result["channels"][index].name == selectedButton) {
-                            selectedChannel = result["channels"][index];
+                    result["channels"].forEach(function (channel) {
+                        if (channel.name === selectedButton) {
+                            selectedChannel = channel;
                         }
-                    }
+                    });
                     var selectedUser = $("input[name=users-checkbox]:checked").val();
                     $.getJSON(
                         
@@ -326,12 +310,12 @@ $(function () {
                         }
                     ).done(function (result) { // JD: 20
                         console.log(result);
-                        for (index = 0; index < result["members"].length; index++) {
-                            if (result["members"][index].name == selectedUser) {
-                                selectedUser = result["members"][index];
+                        result["members"].forEach(function (member) {
+                            if (member.name === selectedUser) {
+                                selectedUser = member;
                             }
-                        }
-                        if ($('input[name=open-channel-button]:checked').length == 0) {
+                        });
+                        if ($('input[name=open-channel-button]:checked').length === 0) {
                             alert("Please select an Open Channel to invite to.");
                         } else {
                             $.getJSON(
@@ -346,11 +330,11 @@ $(function () {
                             ).done(function (result) {
                                 console.log(result);
                                 if (!result["ok"]) {
-                                    if (result["error"] == "cant_invite_self") {
+                                    if (result["error"] === "cant_invite_self") {
                                         $("#invite-status-display")
                                             .empty()
                                             .html("Users cannot invite themselves.");
-                                    } else if (result["error"] == "already_in_channel") {
+                                    } else if (result["error"] === "already_in_channel") {
                                         $("#invite-status-display")
                                             .empty()
                                             .html("This user is already in the channel.");
