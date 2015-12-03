@@ -1,4 +1,10 @@
 (function ($) {
+    var movementsX = [];
+    var movementsY = [];
+    var leftBorder = $('#drawing-area').offset().left;
+    var topBorder = $('#drawing-area').offset().top;
+    var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
+    var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
      */
@@ -7,6 +13,8 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
+                movementsX.push(touch.pageX - touch.target.deltaX);
+                movementsY.push(touch.pageY - touch.target.deltaY);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
@@ -26,9 +34,28 @@
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
-                touch.target.movingBox = null;
+                var movingBox = touch.target.movingBox;
+                var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
+                var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
+                var currentX = touch.pageX - touch.target.deltaX;
+                var currentY = touch.pageY - touch.target.deltaY;
+                var frictionX = -10;
+                var frictionY = -10;
+                $('#drawing-area').append('<p>' + "drawing area X " + $('#drawing-area').offset().left);
+                $('#drawing-area').append('<p>' + "innerHeight " + $('#drawing-area').innerHeight());
+                $('#drawing-area').append('<p>' + "X " + velocityX + " Y " + velocityY + '</p>');
+                $("#drawing-area").append('<p>' + "index " + index + " id " + touch.identifier + '</p>');
+                $("#drawing-area").append('<p>' + "dx" + touch.target.deltaX + "dy" + touch.target.deltaY + '</p>');
+                //while (true) {
+                    movingBox.offset({
+                        left: currentX,
+                        top: currentY
+                    });
+                //}
             }
         });
+        movementsX = [];
+        movementsY = [];
     };
 
     /**
