@@ -5,6 +5,16 @@
     var topBorder = $('#drawing-area').offset().top;
     var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
     var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
+
+    var withinBorders = function (xcoord, ycoord) {
+        if (xcoord > leftBorder && xcoord < rightBorder) {
+            if (ycoord > topBorder && ycoord < bottomBorder) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
      */
@@ -39,24 +49,28 @@
                 var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
                 var currentX = touch.pageX - touch.target.deltaX;
                 var currentY = touch.pageY - touch.target.deltaY;
-                var frictionX = -10;
-                var frictionY = -10;
-                $('#drawing-area').append('<p>' + "drawing area X " + $('#drawing-area').offset().left);
-                $('#drawing-area').append('<p>' + "innerHeight " + $('#drawing-area').innerHeight());
+                var frictionX = -1;
+                var frictionY = -1;
                 $('#drawing-area').append('<p>' + "X " + velocityX + " Y " + velocityY + '</p>');
-                $("#drawing-area").append('<p>' + "index " + index + " id " + touch.identifier + '</p>');
+                //$("#drawing-area").append('<p>' + "index " + index + " id " + touch.identifier + '</p>');
                 $("#drawing-area").append('<p>' + "dx" + touch.target.deltaX + "dy" + touch.target.deltaY + '</p>');
-                //while (true) {
+                while (velocityX != 0 && velocityY != 0 && withinBorders(currentX + velocityX, currentY + velocityY)) {
                     movingBox.offset({
-                        left: currentX,
-                        top: currentY
+                        left: currentX + velocityX,
+                        top: currentY + velocityY
                     });
-                //}
+                    velocityX += frictionX;
+                    velocityY += frictionY;
+                }
             }
         });
         movementsX = [];
         movementsY = [];
     };
+
+    var flick = function (currentX, currentY) {
+
+    }
 
     /**
      * Indicates that an element is unhighlighted.
