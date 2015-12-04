@@ -21,6 +21,24 @@ $(function () {
         return false;
     }
 
+    var reverseDirections = function (element) {
+        var leftSide = element.offset().left;
+        var rightSide = element.offset().left + element.innerWidth();
+        var topSide = element.offset().top;
+        var bottomSide = element.offset().top + element.innerHeight();
+        if (leftSide < leftBorder || rightSide > rightBorder) {
+            element.offset({
+                left: -element.offset().left
+            });
+        }
+
+        if (topSide < topBorder || bottomSide > bottomBorder) {
+            element.offset({
+                top: -element.offset().top
+            });
+        }
+    }
+
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
      */
@@ -48,7 +66,6 @@ $(function () {
         $('#drawing-area').append('<p>' + text + '</p>');
     }
 
-    var flicked = false;
     /**
      * Concludes a drawing or moving sequence.
      */
@@ -58,7 +75,7 @@ $(function () {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
                 lastPosition = touch.target.movingBox.offset();
-                flicked = true;
+                touch.target.movingBox.data("flicked", true);
                 window.requestAnimationFrame(flick);                
             }
         });
@@ -73,15 +90,16 @@ $(function () {
         var dt = timestamp - lastTimestamp;
             $("div.box").each(function (index) {
                 var $box = $(this);
-                if (flicked) {
-                    var velX = (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt;
-                    var velY = (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt;
+                if ($box.data("flicked")) {
+                    $box.data("velX", (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt);
+                    $box.data("velY", (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt);
                     var offset = $box.offset();
-                    var newDistanceX = (velX * dt);
-                    var newDistanceY = (velY * dt);
+                    var newDistanceX = ($box.data("velX") * dt);
+                    var newDistanceY = ($box.data("velY") * dt);
                     offset.left += newDistanceX;
                     offset.top += newDistanceY;
                     $box.offset(offset);
+                    reverseDirections($box);
                 }
             });
         lastTimestamp = timestamp;
@@ -139,6 +157,13 @@ $(function () {
                 element.addEventListener("touchend", unhighlight, false);
             });
 
+        $("div.box").each(function (index) {
+            $(this).data({ 
+                velX: 0.0,
+                velY: 0.0,
+                flicked: false
+            });
+        });
     };
 
     var lastTimestamp = 0;
