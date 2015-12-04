@@ -1,19 +1,24 @@
-(function ($) {
-    var movementsX = [];
-    var movementsY = [];
-    var leftBorder = $('#drawing-area').offset().left;
-    var topBorder = $('#drawing-area').offset().top;
-    var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
-    var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
+// for some reason the code wasn't being called without this
+$(function () {
+    $("#drawing-area").boxesTouch();
+});
 
-    var withinBorders = function (xcoord, ycoord) {
-        if (xcoord > leftBorder && xcoord < rightBorder) {
-            if (ycoord > topBorder && ycoord < bottomBorder) {
-                return true;
-            }
-        }
-        return false;
-    }
+(function ($) {
+    // var movementsX = [];
+    // var movementsY = [];
+    // var leftBorder = $('#drawing-area').offset().left;
+    // var topBorder = $('#drawing-area').offset().top;
+    // var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
+    // var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
+
+    // var withinBorders = function (xcoord, ycoord) {
+    //     if (xcoord > leftBorder && xcoord < rightBorder) {
+    //         if (ycoord > topBorder && ycoord < bottomBorder) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
@@ -23,8 +28,8 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                movementsX.push(touch.pageX - touch.target.deltaX);
-                movementsY.push(touch.pageY - touch.target.deltaY);
+                // movementsX.push(touch.pageX - touch.target.deltaX);
+                // movementsY.push(touch.pageY - touch.target.deltaY);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
@@ -36,6 +41,12 @@
         event.preventDefault();
     };
 
+    var log = function (text) {
+        $('#console')
+            .text(text)
+            .scrollTop($('#console').prop("scrollHeight"));
+    }
+
     /**
      * Concludes a drawing or moving sequence.
      */
@@ -44,33 +55,29 @@
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
-                var movingBox = touch.target.movingBox;
-                var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
-                var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
-                var currentX = touch.pageX - touch.target.deltaX;
-                var currentY = touch.pageY - touch.target.deltaY;
-                var frictionX = -1;
-                var frictionY = -1;
-                $('#drawing-area').append('<p>' + "X " + velocityX + " Y " + velocityY + '</p>');
-                //$("#drawing-area").append('<p>' + "index " + index + " id " + touch.identifier + '</p>');
-                $("#drawing-area").append('<p>' + "dx" + touch.target.deltaX + "dy" + touch.target.deltaY + '</p>');
-                while (velocityX != 0 && velocityY != 0 && withinBorders(currentX + velocityX, currentY + velocityY)) {
-                    movingBox.offset({
-                        left: currentX + velocityX,
-                        top: currentY + velocityY
-                    });
-                    velocityX += frictionX;
-                    velocityY += frictionY;
-                }
+                touch.target.movingBox = null;
+            //     var movingBox = touch.target.movingBox;
+            //     var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
+            //     var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
+            //     var currentX = touch.pageX - touch.target.deltaX;
+            //     var currentY = touch.pageY - touch.target.deltaY;
+            //     var frictionX = -0.01;
+            //     var frictionY = -0.01;
+            //     while (withinBorders(currentX + velocityX, currentY + velocityY)) {
+            //         log("inside");
+            //         movingBox.offset({
+            //             left: currentX + velocityX,
+            //             top: currentY + velocityY
+            //         });
+            //         velocityX += frictionX;
+            //         velocityY += frictionY;
+            //     }
             }
         });
-        movementsX = [];
-        movementsY = [];
+        // movementsX = [];
+        // movementsY = [];
     };
 
-    var flick = function (currentX, currentY) {
-
-    }
 
     /**
      * Indicates that an element is unhighlighted.
@@ -124,7 +131,28 @@
             });
     };
 
+    var lastTimestamp = 0;
+    var updateBoxes = function (timestamp) {
+        var delta = timestamp - lastTimestamp;
+        if (delta > 100) {
+            $("div.box").each(function (index) {
+                var $box = $(this);
+                var offset = $box.offset();
+
+                var distance = 10.0 * delta / 1000;
+                offset.top += Math.floor(distance);
+
+                $box.offset(offset);
+                $("#timestamp").text(JSON.stringify(offset));
+            });
+
+            lastTimestamp = timestamp;
+        }
+        window.requestAnimationFrame(updateBoxes);
+    };
+
     $.fn.boxesTouch = function () {
         setDrawingArea(this);
+        window.requestAnimationFrame(updateBoxes);
     };
 }(jQuery));
