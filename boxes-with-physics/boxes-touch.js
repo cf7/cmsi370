@@ -4,8 +4,9 @@ $(function () {
 });
 
 (function ($) {
-    // var movementsX = [];
-    // var movementsY = [];
+    var boxPositions = [];
+    var timestamps = [];
+    var lastPosition;
     var leftBorder = $('#drawing-area').offset().left;
     var topBorder = $('#drawing-area').offset().top;
     var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
@@ -28,8 +29,8 @@ $(function () {
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                // movementsX.push(touch.pageX - touch.target.deltaX);
-                // movementsY.push(touch.pageY - touch.target.deltaY);
+                boxPositions.push(touch.target.movingBox.offset());
+                window.requestAnimationFrame(setLastTimestamp);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
@@ -42,11 +43,12 @@ $(function () {
     };
 
     var log = function (text) {
-        $('#console')
-            .text(text)
-            .scrollTop($('#console').prop("scrollHeight"));
+        //$('#console').text(text);
+
+        $('#drawing-area').append('<p>' + text + '</p>');
     }
 
+    var flicked = false;
     /**
      * Concludes a drawing or moving sequence.
      */
@@ -55,31 +57,36 @@ $(function () {
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
-                log(index);
-
-                touch.target.movingBox = null;
-                // var movingBox = touch.target.movingBox;
-                // var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
-                // var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
-                // var currentX = touch.pageX - touch.target.deltaX;
-                // var currentY = touch.pageY - touch.target.deltaY;
-                // var frictionX = -0.01;
-                // var frictionY = -0.01;
-                // while (withinBorders(currentX + velocityX, currentY + velocityY)) {
-                //     log("inside");
-                //     movingBox.offset({
-                //         left: currentX + velocityX,
-                //         top: currentY + velocityY
-                //     });
-                //     velocityX += frictionX;
-                //     velocityY += frictionY;
-                // }
+                lastPosition = touch.target.movingBox.offset();
+                flicked = true;
+                window.requestAnimationFrame(flick);                
             }
         });
-        // movementsX = [];
-        // movementsY = [];
     };
+    
 
+    var setLastTimestamp = function (timestamp) {
+        lastTimestamp = timestamp;
+    }
+
+    var flick = function (timestamp) {
+        var dt = timestamp - lastTimestamp;
+            $("div.box").each(function (index) {
+                var $box = $(this);
+                if (flicked) {
+                    var velX = (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt;
+                    var velY = (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt;
+                    var offset = $box.offset();
+                    var newDistanceX = (velX * dt);
+                    var newDistanceY = (velY * dt);
+                    offset.left += newDistanceX;
+                    offset.top += newDistanceY;
+                    $box.offset(offset);
+                }
+            });
+        lastTimestamp = timestamp;
+        window.requestAnimationFrame(flick);
+    }
 
     /**
      * Indicates that an element is unhighlighted.
@@ -131,6 +138,7 @@ $(function () {
                 element.addEventListener("touchstart", startMove, false);
                 element.addEventListener("touchend", unhighlight, false);
             });
+
     };
 
     var lastTimestamp = 0;
