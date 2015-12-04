@@ -6,19 +6,19 @@ $(function () {
 (function ($) {
     // var movementsX = [];
     // var movementsY = [];
-    // var leftBorder = $('#drawing-area').offset().left;
-    // var topBorder = $('#drawing-area').offset().top;
-    // var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
-    // var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
+    var leftBorder = $('#drawing-area').offset().left;
+    var topBorder = $('#drawing-area').offset().top;
+    var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
+    var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
 
-    // var withinBorders = function (xcoord, ycoord) {
-    //     if (xcoord > leftBorder && xcoord < rightBorder) {
-    //         if (ycoord > topBorder && ycoord < bottomBorder) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
+        if (leftSide > leftBorder && rightSide < rightBorder) {
+            if (topSide > topBorder && bottomSide < bottomBorder) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
@@ -55,23 +55,25 @@ $(function () {
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
+                log(index);
+
                 touch.target.movingBox = null;
-            //     var movingBox = touch.target.movingBox;
-            //     var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
-            //     var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
-            //     var currentX = touch.pageX - touch.target.deltaX;
-            //     var currentY = touch.pageY - touch.target.deltaY;
-            //     var frictionX = -0.01;
-            //     var frictionY = -0.01;
-            //     while (withinBorders(currentX + velocityX, currentY + velocityY)) {
-            //         log("inside");
-            //         movingBox.offset({
-            //             left: currentX + velocityX,
-            //             top: currentY + velocityY
-            //         });
-            //         velocityX += frictionX;
-            //         velocityY += frictionY;
-            //     }
+                // var movingBox = touch.target.movingBox;
+                // var velocityX = movementsX[movementsX.length - 1] - movementsX[movementsX.length - 2];
+                // var velocityY = movementsY[movementsY.length - 1] - movementsY[movementsY.length - 2];
+                // var currentX = touch.pageX - touch.target.deltaX;
+                // var currentY = touch.pageY - touch.target.deltaY;
+                // var frictionX = -0.01;
+                // var frictionY = -0.01;
+                // while (withinBorders(currentX + velocityX, currentY + velocityY)) {
+                //     log("inside");
+                //     movingBox.offset({
+                //         left: currentX + velocityX,
+                //         top: currentY + velocityY
+                //     });
+                //     velocityX += frictionX;
+                //     velocityY += frictionY;
+                // }
             }
         });
         // movementsX = [];
@@ -138,11 +140,17 @@ $(function () {
             $("div.box").each(function (index) {
                 var $box = $(this);
                 var offset = $box.offset();
+                var boxHeight = $box.innerHeight();
+                var boxWidth = $box.innerWidth();
+                if (withinBorders(offset.left, offset.top, 
+                        offset.left + boxWidth, 
+                        offset.top + boxHeight)) {
+                    
+                    var distance = 10.0 * delta / 1000;
+                    offset.top += Math.floor(distance);
 
-                var distance = 10.0 * delta / 1000;
-                offset.top += Math.floor(distance);
-
-                $box.offset(offset);
+                    $box.offset(offset);
+                }
                 $("#timestamp").text(JSON.stringify(offset));
             });
 
