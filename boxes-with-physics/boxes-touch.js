@@ -1,11 +1,10 @@
 (function ($) {
-    var boxPositions = [];
     var lastTimestamp = 0;
     var lastPosition;
     var leftBorder = $('#drawing-area').offset().left;
     var topBorder = $('#drawing-area').offset().top;
-    var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
-    var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
+    var rightBorder = leftBorder + $('#drawing-area').innerWidth();
+    var bottomBorder = topBorder + $('#drawing-area').innerHeight();
 
     var log = function (text) {
         $('#drawing-area').append('<p>' + text + '</p>');
@@ -24,23 +23,22 @@
         var rightSide = element.offset().left + element.innerWidth();
         var topSide = element.offset().top;
         var bottomSide = element.offset().top + element.innerHeight();
-        var nextLeftSide = leftSide + element.data("velX");
-        var nextRightSide = rightSide + element.data("velX");
-        var nextTopSide = topSide + element.data("velY");
-        var nextBottomSide = bottomSide + element.data("velY");
+        // var nextLeftSide = leftSide + element.data("velX");
+        // var nextRightSide = rightSide + element.data("velX");
+        // var nextTopSide = topSide + element.data("velY");
+        // var nextBottomSide = bottomSide + element.data("velY");
         if (leftSide <= leftBorder || rightSide >= rightBorder) {
             element.data("velX", -element.data("velX"));
         }
-        if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
-            element.data("velX", -element.data("velX"));
-
-        }
+        // if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+        //     element.data("velX", -element.data("velX"));
+        // }
         if (topSide <= topBorder || bottomSide >= bottomBorder) {
            element.data("velY", -element.data("velY"));
         }
-        if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
-            element.data("velY", -element.data("velY"));
-        }   
+        // if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+        //     element.data("velY", -element.data("velY"));
+        // }   
 
     }
 
@@ -54,8 +52,8 @@
                 if ($box.data("flicked")) {
                     if ($box.data("initial")) {
                         var dt = timestamp - lastTimestamp;
-                        $box.data("velX", (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt);
-                        $box.data("velY", (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt);
+                        $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
+                        $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
                         $box.data("initial", false);
                     }
                     reverseDirections($box);
@@ -77,7 +75,7 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                boxPositions.push(touch.target.movingBox.offset());
+                touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
                 window.requestAnimationFrame(setLastTimestamp);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
@@ -167,7 +165,8 @@
                 velX: 0.0,
                 velY: 0.0,
                 flicked: false,
-                initial: false
+                initial: false,
+                //previousPosition: {}
             });
         });
     };
