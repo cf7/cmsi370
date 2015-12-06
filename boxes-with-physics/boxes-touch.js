@@ -7,75 +7,42 @@
     var rightBorder = $('#drawing-area').offset().left + $('#drawing-area').innerWidth();
     var bottomBorder = $('#drawing-area').offset().top + $('#drawing-area').innerHeight();
 
-    var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
-        if (leftSide > leftBorder && rightSide < rightBorder) {
-            if (topSide > topBorder && bottomSide < bottomBorder) {
-                return true;
-            }
-        }
-        return false;
+    var log = function (text) {
+        $('#drawing-area').append('<p>' + text + '</p>');
     }
-
+    // var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
+    //     if (leftSide > leftBorder && rightSide < rightBorder) {
+    //         if (topSide > topBorder && bottomSide < bottomBorder) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+   
     var reverseDirections = function (element) {
         var leftSide = element.offset().left;
         var rightSide = element.offset().left + element.innerWidth();
         var topSide = element.offset().top;
         var bottomSide = element.offset().top + element.innerHeight();
-        if (leftSide < leftBorder || rightSide > rightBorder) {
+        var nextLeftSide = leftSide + element.data("velX");
+        var nextRightSide = rightSide + element.data("velX");
+        var nextTopSide = topSide + element.data("velY");
+        var nextBottomSide = bottomSide + element.data("velY");
+        if (leftSide <= leftBorder || rightSide >= rightBorder) {
             element.data("velX", -element.data("velX"));
         }
+        if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+            element.data("velX", -element.data("velX"));
 
-        if (topSide < topBorder || bottomSide > bottomBorder) {
+        }
+        if (topSide <= topBorder || bottomSide >= bottomBorder) {
            element.data("velY", -element.data("velY"));
         }
+        if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+            element.data("velY", -element.data("velY"));
+        }   
+
     }
-
-    /**
-     * Tracks a box as it is rubberbanded or moved across the drawing area.
-     */
-    var trackDrag = function (event) {
-        $.each(event.changedTouches, function (index, touch) {
-            // Don't bother if we aren't tracking anything.
-            if (touch.target.movingBox) {
-                // Reposition the object.
-                boxPositions.push(touch.target.movingBox.offset());
-                window.requestAnimationFrame(setLastTimestamp);
-                touch.target.movingBox.offset({
-                    left: touch.pageX - touch.target.deltaX,
-                    top: touch.pageY - touch.target.deltaY
-                });
-            }
-        });
-
-        // Don't do any touch scrolling.
-        event.preventDefault();
-    };
-
-    var log = function (text) {
-        //$('#console').text(text);
-
-        $('#drawing-area').append('<p>' + text + '</p>');
-    }
-
-    /**
-     * Concludes a drawing or moving sequence.
-     */
-    var endDrag = function (event) {
-        $.each(event.changedTouches, function (index, touch) {
-            if (touch.target.movingBox) {
-                // Change state to "not-moving-anything" by clearing out
-                // touch.target.movingBox.
-                lastPosition = touch.target.movingBox.offset();
-                log("last timestamp " + lastTimestamp);
-                touch.target.movingBox
-                    .data("flicked", true)
-                    .data("initial", true);
-                window.requestAnimationFrame(flick);                
-            }
-        });
-    };
-    
-
 
     var setLastTimestamp = function (timestamp) {
         lastTimestamp = timestamp;
@@ -103,6 +70,45 @@
     }
 
     /**
+     * Tracks a box as it is rubberbanded or moved across the drawing area.
+     */
+    var trackDrag = function (event) {
+        $.each(event.changedTouches, function (index, touch) {
+            // Don't bother if we aren't tracking anything.
+            if (touch.target.movingBox) {
+                // Reposition the object.
+                boxPositions.push(touch.target.movingBox.offset());
+                window.requestAnimationFrame(setLastTimestamp);
+                touch.target.movingBox.offset({
+                    left: touch.pageX - touch.target.deltaX,
+                    top: touch.pageY - touch.target.deltaY
+                });
+            }
+        });
+
+        // Don't do any touch scrolling.
+        event.preventDefault();
+    };
+
+    /**
+     * Concludes a drawing or moving sequence.
+     */
+    var endDrag = function (event) {
+        $.each(event.changedTouches, function (index, touch) {
+            if (touch.target.movingBox) {
+                // Change state to "not-moving-anything" by clearing out
+                // touch.target.movingBox.
+                lastPosition = touch.target.movingBox.offset();
+                touch.target.movingBox
+                    .data("flicked", true)
+                    .data("initial", true);
+                window.requestAnimationFrame(flick);                
+            }
+        });
+    };
+    
+
+    /**
      * Indicates that an element is unhighlighted.
      */
     var unhighlight = function () {
@@ -124,6 +130,9 @@
             // Set the drawing area's state to indicate that it is
             // in the middle of a move.
             touch.target.movingBox = jThis;
+            touch.target.movingBox
+                .data("velX", 0)
+                .data("velY", 0);
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
         });
@@ -190,6 +199,6 @@
 
     $.fn.boxesTouch = function () {
         setDrawingArea(this);
-        window.requestAnimationFrame(updateBoxes);
+        //window.requestAnimationFrame(updateBoxes);
     };
 }(jQuery));
