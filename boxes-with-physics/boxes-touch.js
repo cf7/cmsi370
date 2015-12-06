@@ -1,11 +1,6 @@
-// for some reason the code wasn't being called without this
-$(function () {
-    $("#drawing-area").boxesTouch();
-});
-
 (function ($) {
     var boxPositions = [];
-    var timestamps = [];
+    var lastTimestamp = 0;
     var lastPosition;
     var leftBorder = $('#drawing-area').offset().left;
     var topBorder = $('#drawing-area').offset().top;
@@ -27,15 +22,11 @@ $(function () {
         var topSide = element.offset().top;
         var bottomSide = element.offset().top + element.innerHeight();
         if (leftSide < leftBorder || rightSide > rightBorder) {
-            element.offset({
-                left: -element.offset().left
-            });
+            element.data("velX", -element.data("velX"));
         }
 
         if (topSide < topBorder || bottomSide > bottomBorder) {
-            element.offset({
-                top: -element.offset().top
-            });
+           element.data("velY", -element.data("velY"));
         }
     }
 
@@ -75,31 +66,36 @@ $(function () {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
                 lastPosition = touch.target.movingBox.offset();
-                touch.target.movingBox.data("flicked", true);
+                log("last timestamp " + lastTimestamp);
+                touch.target.movingBox
+                    .data("flicked", true)
+                    .data("initial", true);
                 window.requestAnimationFrame(flick);                
             }
         });
     };
     
 
+
     var setLastTimestamp = function (timestamp) {
         lastTimestamp = timestamp;
     }
 
     var flick = function (timestamp) {
-        var dt = timestamp - lastTimestamp;
             $("div.box").each(function (index) {
                 var $box = $(this);
                 if ($box.data("flicked")) {
-                    $box.data("velX", (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt);
-                    $box.data("velY", (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt);
-                    var offset = $box.offset();
-                    var newDistanceX = ($box.data("velX") * dt);
-                    var newDistanceY = ($box.data("velY") * dt);
-                    offset.left += newDistanceX;
-                    offset.top += newDistanceY;
-                    $box.offset(offset);
+                    if ($box.data("initial")) {
+                        var dt = timestamp - lastTimestamp;
+                        $box.data("velX", (lastPosition.left - boxPositions[boxPositions.length - 1].left) / dt);
+                        $box.data("velY", (lastPosition.top - boxPositions[boxPositions.length - 1].top) / dt);
+                        $box.data("initial", false);
+                    }
                     reverseDirections($box);
+                    var offset = $box.offset();
+                    offset.left += $box.data("velX");
+                    offset.top += $box.data("velY");
+                    $box.offset(offset);
                 }
             });
         lastTimestamp = timestamp;
@@ -161,36 +157,36 @@ $(function () {
             $(this).data({ 
                 velX: 0.0,
                 velY: 0.0,
-                flicked: false
+                flicked: false,
+                initial: false
             });
         });
     };
 
-    var lastTimestamp = 0;
-    var updateBoxes = function (timestamp) {
-        var delta = timestamp - lastTimestamp;
-        if (delta > 100) {
-            $("div.box").each(function (index) {
-                var $box = $(this);
-                var offset = $box.offset();
-                var boxHeight = $box.innerHeight();
-                var boxWidth = $box.innerWidth();
-                if (withinBorders(offset.left, offset.top, 
-                        offset.left + boxWidth, 
-                        offset.top + boxHeight)) {
+    // var updateBoxes = function (timestamp) {
+    //     var delta = timestamp - lastTimestamp;
+    //     if (delta > 100) {
+    //         $("div.box").each(function (index) {
+    //             var $box = $(this);
+    //             var offset = $box.offset();
+    //             var boxHeight = $box.innerHeight();
+    //             var boxWidth = $box.innerWidth();
+    //             if (withinBorders(offset.left, offset.top, 
+    //                     offset.left + boxWidth, 
+    //                     offset.top + boxHeight)) {
                     
-                    var distance = 10.0 * delta / 1000;
-                    offset.top += Math.floor(distance);
+    //                 var distance = 10.0 * delta / 1000;
+    //                 offset.top += Math.floor(distance);
 
-                    $box.offset(offset);
-                }
-                $("#timestamp").text(JSON.stringify(offset));
-            });
+    //                 $box.offset(offset);
+    //             }
+    //             $("#timestamp").text(JSON.stringify(offset));
+    //         });
 
-            lastTimestamp = timestamp;
-        }
-        window.requestAnimationFrame(updateBoxes);
-    };
+    //         lastTimestamp = timestamp;
+    //     }
+    //     window.requestAnimationFrame(updateBoxes);
+    // };
 
     $.fn.boxesTouch = function () {
         setDrawingArea(this);
