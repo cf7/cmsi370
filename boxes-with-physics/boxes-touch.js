@@ -7,6 +7,7 @@
     var bottomBorder = topBorder + $('#drawing-area').innerHeight();
 
     var log = function (text) {
+        //$('#console').text($('#console').text() + text);
         $('#drawing-area').append('<p>' + text + '</p>');
     }
     // var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
@@ -17,36 +18,68 @@
     //     }
     //     return false;
     // }
-   
-    var reverseDirections = function (element) {
-        var leftSide = element.offset().left;
-        var rightSide = element.offset().left + element.innerWidth();
-        var topSide = element.offset().top;
-        var bottomSide = element.offset().top + element.innerHeight();
-        // var nextLeftSide = leftSide + element.data("velX");
-        // var nextRightSide = rightSide + element.data("velX");
-        // var nextTopSide = topSide + element.data("velY");
-        // var nextBottomSide = bottomSide + element.data("velY");
-        if (leftSide <= leftBorder || rightSide >= rightBorder) {
-            element.data("velX", -element.data("velX"));
-        }
-        // if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
-        //     element.data("velX", -element.data("velX"));
-        // }
-        if (topSide <= topBorder || bottomSide >= bottomBorder) {
-           element.data("velY", -element.data("velY"));
-        }
-        // if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
-        //     element.data("velY", -element.data("velY"));
-        // }   
 
+    var reverseDirections = function () {
+        $('div.box').each(function (index) {
+            var $box = $(this);
+            if ($box.data("flicked")) {
+        var leftSide = $box.offset().left;
+        var rightSide = leftSide + $box.innerWidth();
+        var topSide = $box.offset().top;
+        var bottomSide = topSide + $box.innerHeight();
+        var nextLeftSide = leftSide + $box.data("velX");
+        var nextRightSide = rightSide + $box.data("velX");
+        var nextTopSide = topSide + $box.data("velY");
+        var nextBottomSide = bottomSide + $box.data("velY");
+        // if (leftSide <= leftBorder || rightSide >= rightBorder) {
+        //     $box.data("velX", -$box.data("velX"));
+        // }
+        if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+            $box.data("velX", -$box.data("velX"));
+        }
+        // if (topSide <= topBorder || bottomSide >= bottomBorder) {
+        //    $box.data("velY", -$box.data("velY"));
+        // }
+        if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+            $box.data("velY", -$box.data("velY"));
+        }   
     }
+    });
+    }
+
+    var applyFriction = function () {
+        $('div.box').each(function (index) {
+            var $box = $(this);
+            if ($box.data("flicked")) {
+                var margin = 0.0001;
+                var velX = $box.data("velX");
+                var velY = $box.data("velY");
+                if (velX > margin) {
+                    $box.data("velX", velX - 0.01);
+                } else if (velX < -margin) {
+                    $box.data("velX", velX + 0.01)
+                }
+                if (velY > margin) {
+                    $box.data("velY", velY - 0.01);
+                } else if (velY < -margin) {
+                    $box.data("velY", velY + 0.01)
+                }
+                if (Math.abs($box.data("velX")) < margin) {
+                    $box.data("velX", 0);
+                }
+                if (Math.abs($box.data("velY")) < margin) {
+                    $box.data("velY", 0);
+                }
+            }
+        });
+   }
 
     var setLastTimestamp = function (timestamp) {
         lastTimestamp = timestamp;
     }
-
+    var index = 0;
     var flick = function (timestamp) {
+        var noneMoving = true;
             $("div.box").each(function (index) {
                 var $box = $(this);
                 if ($box.data("flicked")) {
@@ -56,7 +89,8 @@
                         $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
                         $box.data("initial", false);
                     }
-                    reverseDirections($box);
+                    reverseDirections();
+                    applyFriction();
                     var offset = $box.offset();
                     offset.left += $box.data("velX");
                     offset.top += $box.data("velY");
@@ -64,7 +98,16 @@
                 }
             });
         lastTimestamp = timestamp;
-        window.requestAnimationFrame(flick);
+        $('div.box').each(function (index) {
+            if ($(this).data("velX") != 0 || $(this).data("velY") != 0) {
+                noneMoving = false;
+            }
+        });
+        if (!noneMoving) {
+            window.requestAnimationFrame(flick);
+        } else {
+            return;
+        }
     }
 
     /**
@@ -165,8 +208,7 @@
                 velX: 0.0,
                 velY: 0.0,
                 flicked: false,
-                initial: false,
-                //previousPosition: {}
+                initial: false
             });
         });
     };
