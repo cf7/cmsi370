@@ -173,7 +173,8 @@
             touch.target.movingBox = jThis;
             touch.target.movingBox
                 .data("velX", 0)
-                .data("velY", 0);
+                .data("velY", 0)
+                .data("previousPosition", {});
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
         });
@@ -183,6 +184,22 @@
         event.stopPropagation();
     };
 
+    var gravity = function (event) {
+        var alpha = event.aplha;
+        var beta = event.beta;
+        var gamma = event.gamma;
+        if (beta > 90) {
+            beta = 90;
+        }
+        if (beta < -90) {
+            beta = -90;
+        }
+        $('div.box').each(function (index) {
+            var $box = $(this);
+            $box.data("velY", $box.data("velY") + (beta/100));
+            $box.data("velX", $box.data("velX") + (gamma/100));
+        });
+    }
     /**
      * Sets up the given jQuery collection as the drawing area(s).
      */
@@ -239,6 +256,7 @@
     // };
 
     $.fn.boxesTouch = function () {
+        window.addEventListener("deviceorientation", gravity, true);
         setDrawingArea(this);
         //window.requestAnimationFrame(updateBoxes);
     };
