@@ -22,93 +22,107 @@
     var reverseDirections = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
+            var leftSide = $box.offset().left;
+            var rightSide = leftSide + $box.innerWidth();
+            var topSide = $box.offset().top;
+            var bottomSide = topSide + $box.innerHeight();
+            var nextLeftSide = leftSide + $box.data("velX");
+            var nextRightSide = rightSide + $box.data("velX");
+            var nextTopSide = topSide + $box.data("velY");
+            var nextBottomSide = bottomSide + $box.data("velY");
+            var velX = $box.data("velX");
+            var velY = $box.data("velY");
             if ($box.data("flicked")) {
-        var leftSide = $box.offset().left;
-        var rightSide = leftSide + $box.innerWidth();
-        var topSide = $box.offset().top;
-        var bottomSide = topSide + $box.innerHeight();
-        var nextLeftSide = leftSide + $box.data("velX");
-        var nextRightSide = rightSide + $box.data("velX");
-        var nextTopSide = topSide + $box.data("velY");
-        var nextBottomSide = bottomSide + $box.data("velY");
-        // if (leftSide <= leftBorder || rightSide >= rightBorder) {
-        //     $box.data("velX", -$box.data("velX"));
-        // }
-        if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
-            $box.data("velX", -$box.data("velX"));
-        }
-        // if (topSide <= topBorder || bottomSide >= bottomBorder) {
-        //    $box.data("velY", -$box.data("velY"));
-        // }
-        if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
-            $box.data("velY", -$box.data("velY"));
-        }   
-    }
-    });
-    }
+                if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+                    $box.data("velX", -velX);
+                }
+                if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+                    $box.data("velY", -velX);
+                }   
+            }
 
-    var applyFriction = function () {
-        $('div.box').each(function (index) {
-            var $box = $(this);
-            if ($box.data("flicked")) {
-                var margin = 0.0001;
-                var velX = $box.data("velX");
-                var velY = $box.data("velY");
-                if (velX > margin) {
-                    $box.data("velX", velX - 0.01);
-                } else if (velX < -margin) {
-                    $box.data("velX", velX + 0.01)
+            if (!$box.data("flicked") && $box.data("gravity")) {
+                if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+                    $box.data("velX", -(velX - (0.25 * velX))); 
                 }
-                if (velY > margin) {
-                    $box.data("velY", velY - 0.01);
-                } else if (velY < -margin) {
-                    $box.data("velY", velY + 0.01)
-                }
-                if (Math.abs($box.data("velX")) < margin) {
-                    $box.data("velX", 0);
-                }
-                if (Math.abs($box.data("velY")) < margin) {
-                    $box.data("velY", 0);
-                }
+                if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+                    $box.data("velY", -(velY - (0.25 * velY)));
+                }    
             }
         });
-   }
+    }
 
-    var setLastTimestamp = function (timestamp) {
-        lastTimestamp = timestamp;
-    }
-    var index = 0;
-    var flick = function (timestamp) {
-        var noneMoving = true;
-            $("div.box").each(function (index) {
-                var $box = $(this);
-                if ($box.data("flicked")) {
-                    if ($box.data("initial")) {
-                        var dt = timestamp - lastTimestamp;
-                        $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
-                        $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
-                        $box.data("initial", false);
-                    }
-                    reverseDirections();
-                    applyFriction();
-                    var offset = $box.offset();
-                    offset.left += $box.data("velX");
-                    offset.top += $box.data("velY");
-                    $box.offset(offset);
-                }
-            });
-        lastTimestamp = timestamp;
-        $('div.box').each(function (index) {
-            if ($(this).data("velX") != 0 || $(this).data("velY") != 0) {
-                noneMoving = false;
-            }
-        });
-        if (!noneMoving) {
-            window.requestAnimationFrame(flick);
-        } else {
-            return;
-        }
-    }
+    // var applyFriction = function () {
+    //     $('div.box').each(function (index) {
+    //         var $box = $(this);
+    //         if ($box.data("flicked") && $box.data("friction")) {
+    //             var margin = 0.0001;
+    //             var velX = $box.data("velX");
+    //             var velY = $box.data("velY");
+
+    //             if (velX > margin) {
+    //                 $box.data("velX", velX - 0.01);
+    //             } else if (velX < -margin) {
+    //                 $box.data("velX", velX + 0.01);
+    //             }
+    //             if (velY > margin) {
+    //                 $box.data("velY", velY - 0.01);
+    //             } else if (velY < -margin) {
+    //                 $box.data("velY", velY + 0.01);
+    //             }
+
+    //             if (Math.abs($box.data("velX")) < margin) {
+    //                 log("inside");
+    //                 $box.data("velX", 0)
+    //                     .data("flicked", false)
+    //                     //.data("friction", false)
+    //                     .data("gravity", true);
+    //             }
+    //             if (Math.abs($box.data("velY")) < margin) {
+    //                 log("insideY");
+    //                 $box.data("velY", 0)
+    //                     .data("flicked", false)
+    //                     //.data("friction", false)
+    //                     .data("gravity", true);
+    //             }
+    //         }
+    //     });
+    // }
+
+    // var setLastTimestamp = function (timestamp) {
+    //     lastTimestamp = timestamp;
+    // }
+    // var flick = function (timestamp) {
+    //     var noneMoving = true;
+    //         $("div.box").each(function (index) {
+    //             var $box = $(this);
+    //             if ($box.data("flicked")) {
+    //                 if ($box.data("initial")) {
+    //                     var dt = timestamp - lastTimestamp;
+    //                     $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
+    //                     $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
+    //                     $box.data("initial", false);
+    //                 }
+    //                 reverseDirections();
+    //                 applyFriction();
+    //                 var offset = $box.offset();
+    //                 offset.left += $box.data("velX");
+    //                 offset.top += $box.data("velY");
+    //                 $box.offset(offset);
+    //             }
+    //         });
+    //     lastTimestamp = timestamp;
+    //     $('div.box').each(function (index) {
+    //         if ($(this).data("velX") != 0 || $(this).data("velY") != 0) {
+    //             noneMoving = false;
+    //         }
+    //     });
+    //     if (!noneMoving) {
+    //         window.requestAnimationFrame(flick);
+    //     } else {
+    //         return;
+    //     }
+    // }
 
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
@@ -118,8 +132,8 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
-                window.requestAnimationFrame(setLastTimestamp);
+                // touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
+                // window.requestAnimationFrame(setLastTimestamp);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
@@ -139,11 +153,13 @@
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
-                lastPosition = touch.target.movingBox.offset();
-                touch.target.movingBox
-                    .data("flicked", true)
-                    .data("initial", true);
-                window.requestAnimationFrame(flick);                
+                touch.target.movingBox = null;
+                // lastPosition = touch.target.movingBox.offset();
+                // touch.target.movingBox
+                //     .data("flicked", true)
+                //     .data("initial", true)
+                //     .data("friction", true);
+                // window.requestAnimationFrame(flick);                
             }
         });
     };
@@ -174,7 +190,8 @@
             touch.target.movingBox
                 .data("velX", 0)
                 .data("velY", 0)
-                .data("previousPosition", {});
+                .data("previousPosition", {})
+                .data("gravity", false);
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
         });
@@ -188,16 +205,34 @@
         var alpha = event.aplha;
         var beta = event.beta;
         var gamma = event.gamma;
+        var mass = 0.1;
+
         if (beta > 90) {
             beta = 90;
         }
         if (beta < -90) {
             beta = -90;
         }
+        if (gamma > 90) {
+            gamma = 90;
+        }
+        if (gamma < -90) {
+            gamma = -90;
+        }
+        beta = beta * (Math.PI/180);
+        gamma = gamma * (Math.PI/180);
         $('div.box').each(function (index) {
             var $box = $(this);
-            $box.data("velY", $box.data("velY") + (beta/100));
-            $box.data("velX", $box.data("velX") + (gamma/100));
+            if ($box.data("gravity")) {
+                reverseDirections();
+                $box.data("velY", $box.data("velY") + ((mass * 9.81) * (Math.sin(beta))));
+                $box.data("velX", $box.data("velX") + ((mass * 9.81) * (Math.sin(gamma))));
+
+                $box.offset({
+                    left: $box.offset().left + $box.data("velX"),
+                    top: $box.offset().top + $box.data("velY")
+                });
+            }
         });
     }
     /**
@@ -225,7 +260,9 @@
                 velX: 0.0,
                 velY: 0.0,
                 flicked: false,
-                initial: false
+                initial: false,
+                friction: false,
+                gravity: true
             });
         });
     };
