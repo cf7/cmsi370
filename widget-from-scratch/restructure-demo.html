@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Assorted iOS-related metadata. -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Restructure Plugin Demonstration</title>
+    <link rel="stylesheet" type="text/css" href="boxes-touch.css"/>
+
+    <!-- Styles that are totally specific to this page. -->
+    <link rel="stylesheet" type="text/css" href="boxes-touch-demo.css"/>
+  </head>
+    
+  <body>
+    <!-- "Pre-load" the drawing area with a couple of boxes.
+         Inline style attributes are tolerable here since they are
+         manually set when done in code anyway. -->
+    <div id="drawing-area">
+      <div class="box"
+          style="width: 60px; height: 60px; left: 11px; top: 75px">
+      </div>
+      <div class="box"
+          style="width: 80px; height: 50px; left: 200px; top: 256px">
+      </div>
+      <div class="box"
+          style="width: 70px; height: 90px; left: 120px; top: 150px">
+      </div>
+    </div>
+
+
+    <!-- Load up jQuery first. -->
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+
+    <!-- Load up the controller code. -->
+    <script src="restructure.js"></script>
+
+    <!-- Code that is totally specific to this page. -->
+    <script src="restructure-demo.js"></script>
+    
+  </body>
+</html>
