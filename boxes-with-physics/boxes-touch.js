@@ -22,23 +22,35 @@
     var reverseDirections = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
+            var velX = $box.data("velX");
+            var velY = $box.data("velY");
             var leftSide = $box.offset().left;
             var rightSide = leftSide + $box.innerWidth();
             var topSide = $box.offset().top;
             var bottomSide = topSide + $box.innerHeight();
-            var nextLeftSide = leftSide + $box.data("velX");
-            var nextRightSide = rightSide + $box.data("velX");
-            var nextTopSide = topSide + $box.data("velY");
-            var nextBottomSide = bottomSide + $box.data("velY");
-            var velX = $box.data("velX");
-            var velY = $box.data("velY");
+            var nextLeftSide = leftSide + velX;
+            var nextRightSide = rightSide + velX;
+            var nextTopSide = topSide + velY;
+            var nextBottomSide = bottomSide + velY;
+           
+
+            // uncomment to see friction
+            // if ($box.data("flicked")) {
+            //     if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
+            //         $box.data("velX", -velX);
+            //     }
+            //     if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
+            //         $box.data("velY", -velX);
+            //     }   
+            // }
+
             if ($box.data("flicked")) {
                 if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
-                    $box.data("velX", -velX);
+                    $box.data("velX", -(velX - (0.25 * velX))); 
                 }
                 if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
-                    $box.data("velY", -velX);
-                }   
+                    $box.data("velY", -(velY - (0.25 * velY)));
+                }    
             }
 
             if (!$box.data("flicked") && $box.data("gravity")) {
@@ -52,77 +64,84 @@
         });
     }
 
-    // var applyFriction = function () {
-    //     $('div.box').each(function (index) {
-    //         var $box = $(this);
-    //         if ($box.data("flicked") && $box.data("friction")) {
-    //             var margin = 0.0001;
-    //             var velX = $box.data("velX");
-    //             var velY = $box.data("velY");
+    /**
+    * Uncomment to see plugin with friction
+    */
 
-    //             if (velX > margin) {
-    //                 $box.data("velX", velX - 0.01);
-    //             } else if (velX < -margin) {
-    //                 $box.data("velX", velX + 0.01);
-    //             }
-    //             if (velY > margin) {
-    //                 $box.data("velY", velY - 0.01);
-    //             } else if (velY < -margin) {
-    //                 $box.data("velY", velY + 0.01);
-    //             }
+    var applyFriction = function () {
+        $('div.box').each(function (index) {
+            var $box = $(this);
+            if ($box.data("flicked") && $box.data("friction")) {
+                var margin = 0.0001;
+                var velX = $box.data("velX");
+                var velY = $box.data("velY");
 
-    //             if (Math.abs($box.data("velX")) < margin) {
-    //                 log("inside");
-    //                 $box.data("velX", 0)
-    //                     .data("flicked", false)
-    //                     //.data("friction", false)
-    //                     .data("gravity", true);
-    //             }
-    //             if (Math.abs($box.data("velY")) < margin) {
-    //                 log("insideY");
-    //                 $box.data("velY", 0)
-    //                     .data("flicked", false)
-    //                     //.data("friction", false)
-    //                     .data("gravity", true);
-    //             }
-    //         }
-    //     });
-    // }
+                // if (velX > margin) {
+                //     $box.data("velX", velX - 0.01);
+                // } else if (velX < -margin) {
+                //     $box.data("velX", velX + 0.01);
+                // }
+                // if (velY > margin) {
+                //     $box.data("velY", velY - 0.01);
+                // } else if (velY < -margin) {
+                //     $box.data("velY", velY + 0.01);
+                // }
 
-    // var setLastTimestamp = function (timestamp) {
-    //     lastTimestamp = timestamp;
-    // }
-    // var flick = function (timestamp) {
-    //     var noneMoving = true;
-    //         $("div.box").each(function (index) {
-    //             var $box = $(this);
-    //             if ($box.data("flicked")) {
-    //                 if ($box.data("initial")) {
-    //                     var dt = timestamp - lastTimestamp;
-    //                     $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
-    //                     $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
-    //                     $box.data("initial", false);
-    //                 }
-    //                 reverseDirections();
-    //                 applyFriction();
-    //                 var offset = $box.offset();
-    //                 offset.left += $box.data("velX");
-    //                 offset.top += $box.data("velY");
-    //                 $box.offset(offset);
-    //             }
-    //         });
-    //     lastTimestamp = timestamp;
-    //     $('div.box').each(function (index) {
-    //         if ($(this).data("velX") != 0 || $(this).data("velY") != 0) {
-    //             noneMoving = false;
-    //         }
-    //     });
-    //     if (!noneMoving) {
-    //         window.requestAnimationFrame(flick);
-    //     } else {
-    //         return;
-    //     }
-    // }
+                if (Math.abs(velX) < margin) {
+                    log("inside1 " + velX);
+                    $box.data("velX", 0);
+                    log("inside2 " + velX);   
+                }
+                if (Math.abs(velY) < margin) {
+                    log("insideY");
+                    $box.data("velY", 0);
+                }
+
+                if (velX == 0 && velY == 0) {
+                    $box.data("flicked", false)
+                        .data("friction", false)
+                        .data("gravity", true);
+                }
+            }
+        });
+    }
+
+    var setLastTimestamp = function (timestamp) {
+        lastTimestamp = timestamp;
+    }
+
+    var flick = function (timestamp) {
+        var noneMoving = true;
+        $("div.box").each(function (index) {
+            var $box = $(this);
+            if ($box.data("flicked")) {
+                if ($box.data("initial")) {
+                    var dt = timestamp - lastTimestamp;
+                    $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
+                    $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
+                    $box.data("initial", false);
+                }
+                reverseDirections();
+                applyFriction();
+                var offset = $box.offset();
+                offset.left += $box.data("velX");
+                offset.top += $box.data("velY");
+                $box.offset(offset);
+            }
+        });
+        lastTimestamp = timestamp;
+        $('div.box').each(function (index) {
+            if ($(this).data("flicked")) {
+                noneMoving = false;
+            }
+        });
+        if (!noneMoving) {
+            window.requestAnimationFrame(flick);
+        } else {
+            log("inside return");
+            return;
+        }
+    }
 
     /**
      * Tracks a box as it is rubberbanded or moved across the drawing area.
@@ -132,8 +151,8 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                // touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
-                // window.requestAnimationFrame(setLastTimestamp);
+                touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
+                window.requestAnimationFrame(setLastTimestamp);
                 touch.target.movingBox.offset({
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
@@ -153,13 +172,12 @@
             if (touch.target.movingBox) {
                 // Change state to "not-moving-anything" by clearing out
                 // touch.target.movingBox.
-                touch.target.movingBox = null;
-                // lastPosition = touch.target.movingBox.offset();
-                // touch.target.movingBox
-                //     .data("flicked", true)
-                //     .data("initial", true)
-                //     .data("friction", true);
-                // window.requestAnimationFrame(flick);                
+                lastPosition = touch.target.movingBox.offset();
+                touch.target.movingBox
+                    .data("flicked", true)
+                    .data("initial", true)
+                    .data("friction", true);
+                window.requestAnimationFrame(flick);
             }
         });
     };
@@ -190,7 +208,6 @@
             touch.target.movingBox
                 .data("velX", 0)
                 .data("velY", 0)
-                .data("previousPosition", {})
                 .data("gravity", false);
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
@@ -259,6 +276,7 @@
             $(this).data({ 
                 velX: 0.0,
                 velY: 0.0,
+                previousPosition: {},
                 flicked: false,
                 initial: false,
                 friction: false,
