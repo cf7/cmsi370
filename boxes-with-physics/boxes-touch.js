@@ -35,8 +35,7 @@
             var nextTopSide = topSide + velY;
             var nextBottomSide = bottomSide + velY;
            
-
-            // uncomment to see friction
+            // might not need this
             // if ($box.data("flicked")) {
             //     if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
             //         $box.data("velX", -velX);
@@ -67,9 +66,10 @@
     }
 
     /**
-    * Uncomment to see plugin with friction
+    * With the implementation below, the boxes only experience friction
+    * and energy loss when contacting a wall. To see air friction, uncomment
+    * the block that is commented below.
     */
-
     var applyFriction = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
@@ -284,6 +284,9 @@
         });
     };
 
+    /**
+    * Code from in class.
+    */ 
     // var updateBoxes = function (timestamp) {
     //     var delta = timestamp - lastTimestamp;
     //     if (delta > 100) {
