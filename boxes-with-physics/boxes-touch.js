@@ -10,6 +10,8 @@
         //$('#console').text($('#console').text() + text);
         $('#drawing-area').append('<p>' + text + '</p>');
     }
+        log("leftBorder " + leftBorder);
+
     // var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
     //     if (leftSide > leftBorder && rightSide < rightBorder) {
     //         if (topSide > topBorder && bottomSide < bottomBorder) {
@@ -88,12 +90,9 @@
                 // }
 
                 if (Math.abs(velX) < margin) {
-                    log("inside1 " + velX);
                     $box.data("velX", 0);
-                    log("inside2 " + velX);   
                 }
                 if (Math.abs(velY) < margin) {
-                    log("insideY");
                     $box.data("velY", 0);
                 }
 
@@ -117,8 +116,8 @@
             if ($box.data("flicked")) {
                 if ($box.data("initial")) {
                     var dt = timestamp - lastTimestamp;
-                    $box.data("velX", (lastPosition.left - $box.data("previousPosition").left) / dt);
-                    $box.data("velY", (lastPosition.top - $box.data("previousPosition").top) / dt);
+                    $box.data("velX", ((lastPosition.left - $box.data("previousPosition").left)*10) / dt);
+                    $box.data("velY", ((lastPosition.top - $box.data("previousPosition").top)*10) / dt);
                     $box.data("initial", false);
                 }
                 reverseDirections();
