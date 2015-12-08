@@ -3,42 +3,44 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Assorted iOS-related metadata. -->
     <meta name="viewport" content="width=device-width" />
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
     <title>Restructure Plugin Demonstration</title>
-    <link rel="stylesheet" type="text/css" href="boxes-touch.css"/>
+    <link rel="stylesheet" type="text/css" href="restructure.css"/>
 
     <!-- Styles that are totally specific to this page. -->
-    <link rel="stylesheet" type="text/css" href="boxes-touch-demo.css"/>
+    <link rel="stylesheet" type="text/css" href="restructure-demo.css"/>
   </head>
     
   <body>
-    <!-- "Pre-load" the drawing area with a couple of boxes.
-         Inline style attributes are tolerable here since they are
-         manually set when done in code anyway. -->
-    <div id="drawing-area">
-      <div class="box"
-          style="width: 60px; height: 60px; left: 11px; top: 75px">
-      </div>
-      <div class="box"
-          style="width: 80px; height: 50px; left: 200px; top: 256px">
-      </div>
-      <div class="box"
-          style="width: 70px; height: 90px; left: 120px; top: 150px">
+    
+    <div class="container-fluid" id="grid">
+      <div class="row">
+        <div class="col-sm-4 tile1">TopLeft</div>
+        <div class="col-sm-4 tile2">TopCenter</div>
+        <div class="col-sm-4 tile3">TopRight</div>
+        <div class="col-sm-4 tile2">Left</div>
+        <div class="col-sm-4 tile3">Center</div>
+        <div class="col-sm-4 tile1">Right</div>
+        <div class="col-sm-4 tile3">BottomLeft</div>
+        <div class="col-sm-4 tile1">BottomCenter</div>
+        <div class="col-sm-4 tile2">BottomRight</div>
       </div>
     </div>
 
-
     <!-- Load up jQuery first. -->
     <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-
+   
     <!-- Load up the controller code. -->
     <script src="restructure.js"></script>
 
     <!-- Code that is totally specific to this page. -->
     <script src="restructure-demo.js"></script>
-    
+
   </body>
 </html>
