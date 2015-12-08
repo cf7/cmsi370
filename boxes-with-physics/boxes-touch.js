@@ -7,19 +7,8 @@
     var bottomBorder = topBorder + $('#drawing-area').innerHeight();
 
     var log = function (text) {
-        //$('#console').text($('#console').text() + text);
         $('#drawing-area').append('<p>' + text + '</p>');
     }
-        log("leftBorder " + leftBorder);
-
-    // var withinBorders = function (leftSide, topSide, rightSide, bottomSide) {
-    //     if (leftSide > leftBorder && rightSide < rightBorder) {
-    //         if (topSide > topBorder && bottomSide < bottomBorder) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
 
     var reverseDirections = function () {
         $('div.box').each(function (index) {
@@ -251,6 +240,7 @@
             }
         });
     }
+
     /**
      * Sets up the given jQuery collection as the drawing area(s).
      */
@@ -284,37 +274,8 @@
         });
     };
 
-    /**
-    * Code from in class.
-    */ 
-    // var updateBoxes = function (timestamp) {
-    //     var delta = timestamp - lastTimestamp;
-    //     if (delta > 100) {
-    //         $("div.box").each(function (index) {
-    //             var $box = $(this);
-    //             var offset = $box.offset();
-    //             var boxHeight = $box.innerHeight();
-    //             var boxWidth = $box.innerWidth();
-    //             if (withinBorders(offset.left, offset.top, 
-    //                     offset.left + boxWidth, 
-    //                     offset.top + boxHeight)) {
-                    
-    //                 var distance = 10.0 * delta / 1000;
-    //                 offset.top += Math.floor(distance);
-
-    //                 $box.offset(offset);
-    //             }
-    //             $("#timestamp").text(JSON.stringify(offset));
-    //         });
-
-    //         lastTimestamp = timestamp;
-    //     }
-    //     window.requestAnimationFrame(updateBoxes);
-    // };
-
     $.fn.boxesTouch = function () {
         window.addEventListener("deviceorientation", gravity, true);
         setDrawingArea(this);
-        //window.requestAnimationFrame(updateBoxes);
     };
 }(jQuery));
