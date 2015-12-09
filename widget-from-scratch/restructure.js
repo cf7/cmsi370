@@ -3,28 +3,44 @@
     var dragTile;
 
     var dragHandler = function (event) {
+        // shift tiles to give preview of drop
+
+        /**
+        * Have surrounding tiles rearrange themselves to
+        * preview tile drop
+        */
+
         dragTile.offset({ 
             left: event.pageX - dragTile.deltaX, 
             top: event.pageY - dragTile.deltaY
         });
     };
     var dragCleanUp = function (event) {
-        // if statement for placing tile
+        /**
+        * if user decides not to drop, revert back to original positions
+        */
+
+        /**
+        * if user decides to drop, removed tile classes from other divs
+        * Use clone to place new div in drop location and delete original
+        * tile
+        */
+
         dragTile.remove();
         $("body").unbind("mousemove", dragHandler);
     };
-    var addAttributes = function () {
-        $("div").each(function (index) { 
-            $(this).addClass("tile");
+    var addDivs = function () {
+        $('div.col-sm-4').each(function (index) {
+            var $col = $(this);
+            $col.wrap("<div class='tile'></div>");
         });
     }
     $.fn.restructure = function () {
 
-        addAttributes();
+        addDivs();
 
         this.mousedown(function (event) {
-            if ($(event.target).hasClass("tile")) {
-                console.log("outside");
+            if ($(event.target).parent().hasClass("tile")) {
                 dragTile = $(event.target).clone();
                 var startOffset = $(event.target).offset();
                 dragTile.deltaX = event.pageX - startOffset.left;
@@ -36,7 +52,6 @@
                         });
                 $("body").append(dragTile);
                 $("body").mousemove(dragHandler);
-
                 dragTile.mouseup(dragCleanUp);
             }
         });
