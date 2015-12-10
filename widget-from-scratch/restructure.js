@@ -3,14 +3,6 @@
     var dragTile;
 
     var dragHandler = function (event) {
-        // shift tiles to give preview of drop
-
-        /**
-        * Have surrounding tiles rearrange themselves to
-        * preview tile drop
-        * (maybe not)
-        */
-
         dragTile.offset({ 
             left: event.pageX - dragTile.deltaX, 
             top: event.pageY - dragTile.deltaY
@@ -21,19 +13,9 @@
 
 
     var dragCleanUp = function (event) {
-        /**
-        * if user decides not to drop, revert back to original positions
-        */
-
-        /**
-        * if user decides to drop, removed tile classes from other divs
-        * Use clone to place new div in drop location and delete original
-        * tile
-        */
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top)); //coudn't find jQuery equivalent
-        dragTile.show();
         console.log($element);
         if ($element.parent().hasClass("tile")) {
             $("#original").parent().attr("id", "sendingTile");
@@ -41,6 +23,7 @@
             $("#sendingTile").append($element);
             $("#receivingTile").append($("#original"));
             dragTile.remove();
+            console.log("afterremove");
             $(".tile").removeAttr("id");
             $("#original").removeAttr("id");
         }
@@ -49,12 +32,19 @@
 
 
     // might not need this
-    var hoverHandler = function (event) {
-        console.log("hovering");
-        /**
-        * Dynamics of communicating with surrounding tiles and knowing when and
-        * where to move.
-        */
+    var hoverIn = function (event) {
+        console.log("hoverIn");
+        var $element = $(event.target);
+        if ($element.parent().hasClass("tile")) {
+            $element.css({ border: "5px solid blue" });
+        }
+    };
+
+    var hoverOut = function (event) {
+        var $element = $(event.target);
+        if ($element.parent().hasClass("tile")) {
+            $element.css({ border: "" });
+        }
     };
 
     var addDivs = function () {
@@ -65,12 +55,16 @@
         });
         $(".tile").each(function (index) {
             var $tile = $(this);
-            $tile.mouseover(hoverHandler); // mouseover() or hover(), why different functions?
+            $tile.hover(hoverIn, hoverOut);
         });
-    }
+    };
 
     $.fn.restructure = function () {
         addDivs();
+
+        /**
+        * Add feedback for the user!!!!!!!!!!!!!!!!
+        */
 
         this.mousedown(function (event) {
             $(event.target).attr("id", "original");
