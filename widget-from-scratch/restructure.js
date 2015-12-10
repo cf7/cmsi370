@@ -32,7 +32,7 @@
         */
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
-        var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top));
+        var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top)); //coudn't find jQuery equivalent
         dragTile.show();
         console.log($element);
         if ($element.parent().hasClass("tile")) {
@@ -45,14 +45,6 @@
             $("#original").removeAttr("id");
         }
         $("body").unbind("mousemove", dragHandler);
-    };
-
-    var move = function () {
-        /**
-        * 2 instances for moving: 1.) An empty space has opened, move to empty space
-        * if it is this tile's turn
-        * 2.) 
-        */
     };
 
 
@@ -82,9 +74,10 @@
 
         this.mousedown(function (event) {
             $(event.target).attr("id", "original");
-            dragTile = $(event.target).parent().clone(true);
-            if (dragTile.hasClass("tile")) {
-                var startOffset = dragTile.offset();
+            if ($(event.target).parent().hasClass("tile")) {
+                dragTile = $(event.target).clone();
+                dragTile.attr("id", "tile-being-dragged");
+                var startOffset = $(event.target).offset(); // do not use the offset of the clone!
                 dragTile.deltaX = event.pageX - startOffset.left;
                 dragTile.deltaY = event.pageY - startOffset.top;
                 dragTile.offset({
