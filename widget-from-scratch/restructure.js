@@ -1,6 +1,6 @@
 (function ($) {
 
-    var $dragTile;
+    var dragTile;
 
     var dragHandler = function (event) {
         // shift tiles to give preview of drop
@@ -11,9 +11,9 @@
         * (maybe not)
         */
 
-        $dragTile.offset({ 
-            left: event.pageX - $dragTile.deltaX, 
-            top: event.pageY - $dragTile.deltaY
+        dragTile.offset({ 
+            left: event.pageX - dragTile.deltaX, 
+            top: event.pageY - dragTile.deltaY
         });
 
        $("body").data("mouseCoordinates", { left: event.pageX, top: event.pageY });
@@ -31,12 +31,18 @@
         * tile
         */
         var mousePosition = $("body").data("mouseCoordinates");
-        $dragTile.hide();
+        dragTile.hide();
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top));
-        $dragTile.show();
+        dragTile.show();
         console.log($element);
-        if ($element.hasClass("tile")) {
-           
+        if ($element.parent().hasClass("tile")) {
+            $("#original").parent().attr("id", "sendingTile");
+            $element.parent().attr("id", "receivingTile");
+            $("#sendingTile").append($element);
+            $("#receivingTile").append($("#original"));
+            dragTile.remove();
+            $(".tile").removeAttr("id");
+            $("#original").removeAttr("id");
         }
         $("body").unbind("mousemove", dragHandler);
     };
@@ -75,19 +81,19 @@
         addDivs();
 
         this.mousedown(function (event) {
-            $dragTile = $(event.target);
-            if ($dragTile.parent().hasClass("tile")) {
-                var startOffset = $dragTile.offset();
-                $dragTile.data("originalPosition", startOffset);
-                $dragTile.deltaX = event.pageX - startOffset.left;
-                $dragTile.deltaY = event.pageY - startOffset.top;
-                $dragTile.offset({
-                            left: event.pageX - $dragTile.deltaX,
-                            top: event.pageY - $dragTile.deltaY
+            $(event.target).attr("id", "original");
+            dragTile = $(event.target).parent().clone(true);
+            if (dragTile.hasClass("tile")) {
+                var startOffset = dragTile.offset();
+                dragTile.deltaX = event.pageX - startOffset.left;
+                dragTile.deltaY = event.pageY - startOffset.top;
+                dragTile.offset({
+                            left: event.pageX - dragTile.deltaX,
+                            top: event.pageY - dragTile.deltaY
                         });
-                $("body").append($dragTile);
+                $("body").append(dragTile);
                 $("body").mousemove(dragHandler);
-                $dragTile.mouseup(dragCleanUp);
+                dragTile.mouseup(dragCleanUp);
             }
         });
     };
