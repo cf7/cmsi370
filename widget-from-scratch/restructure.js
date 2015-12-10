@@ -35,12 +35,8 @@
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top));
         $dragTile.show();
         console.log($element);
-        if ($element.hasClass("tile") || $element.parents().hasClass("tile")) {
-            $dragTile.hide();
-            $dragTile.insertAfter($element);
-            $dragTile.remove();
-        } else {
-            $dragTile.parent().append($dragTile);
+        if ($element.hasClass("tile")) {
+           
         }
         $("body").unbind("mousemove", dragHandler);
     };
@@ -85,8 +81,7 @@
                 $dragTile.data("originalPosition", startOffset);
                 $dragTile.deltaX = event.pageX - startOffset.left;
                 $dragTile.deltaY = event.pageY - startOffset.top;
-                $dragTile.addClass("tile-being-dragged")
-                        .offset({
+                $dragTile.offset({
                             left: event.pageX - $dragTile.deltaX,
                             top: event.pageY - $dragTile.deltaY
                         });
