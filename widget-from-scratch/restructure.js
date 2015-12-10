@@ -48,8 +48,7 @@
     };
 
     var addDivs = function () {
-        // look into using selectors $("div[class|='col']").each( . . .)
-        $(".row").children().each(function (index) {
+        $("div[class|='col']").each(function (index) {
             var $col = $(this);
             $col.wrap("<div class='tile'></div>");
         });
