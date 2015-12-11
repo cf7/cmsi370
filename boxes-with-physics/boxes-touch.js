@@ -20,9 +20,9 @@
             var velX = $box.data("velX");
             var velY = $box.data("velY");
             var leftSide = $box.offset().left;
-            var rightSide = leftSide + $box.innerWidth();
+            var rightSide = leftSide + $box.outerWidth();
             var topSide = $box.offset().top;
-            var bottomSide = topSide + $box.innerHeight();
+            var bottomSide = topSide + $box.outerHeight();
             var nextLeftSide = leftSide + velX;
             var nextRightSide = rightSide + velX;
             var nextTopSide = topSide + velY;
@@ -31,29 +31,45 @@
             // use current position instead of next position
             // hard code it to move back in
             if ($box.data("flicked")) {
-                if (nextLeftSide < leftBorder) {
-                    $box.offset({ left: $box.offset().left + 10 }); // clamping still led to sticking because of frame-rate
+                if (leftSide < leftBorder) {
+                    $box.data("outOfBounds", true);
+                    //while ($box.offset().left <= leftBorder) {
+                        
+                        $box.offset({ left: leftBorder + 5 });
+                    //}
                     //$box.offset(nextLeftSide < leftBorder ? leftBorder : rightBorder, $box.offset().top);
-                    $box.data("velX", -(velX - (0.25 * velX))); // Math.abs somewhere cuz otherwise velocity only increases
+                    $box.data("velX", -(velX - (0.5 * velX))); // Math.abs somewhere cuz otherwise velocity only increases
                     // I think this will still work because having (velX - (0.25 * velX)),
                     // if velX is negative, then the middle negative sign will flip the 2nd velX, which
                     // succesfully reduces the absolute velocity
                 }
-                if (nextRightSide > rightBorder ) {
-                    $box.offset({ left: $box.offset().left - 10 });
-                    $box.data("velX", -(velX - (0.25 * velX)));
+                if (rightSide > rightBorder ) {
+                    $box.data("outOfBounds", true);
+                    //while ($box.offset().left >= rightBorder) {
+                        $box.offset({ left: rightBorder - $box.outerWidth(true) - 5 });
+                    //}
+                    $box.data("velX", -(velX - (0.5 * velX)));
                 }
-                if (nextTopSide < topBorder) {
-                    $box.offset({ top: $box.offset().top + 10 });
-                    $box.data("velY", -(velY - (0.25 * velY)));
+                if (topSide < topBorder) {
+                    console.log(topBorder);
+                    $box.data("outOfBounds", true);
+                    //while ($box.offset().top <= topBorder) {
+                        $box.offset({ top: topBorder + 5 });
+                    //}
+                    $box.data("velY", -(velY - (0.5 * velY)));
                 }    
-                if (nextBottomSide > bottomBorder) {
-                    $box.offset({ top: $box.offset().top - 10 });
-                    $box.data("velY", -(velY - (0.25 * velY)));
+                if (bottomSide > bottomBorder) {
+                    $box.data("outOfBounds", true);
+                    //while ($box.offset().top >= bottomBorder) {
+                        $box.offset({ top: bottomBorder - $box.outerHeight(true) - 5 });
+                    //}
+                    $box.data("velY", -(velY - (0.5 * velY)));
                 }
+
+                $box.data("outOfBounds", false);
             }
 
-            if (!$box.data("flicked") && $box.data("gravity")) {
+            if ($box.data("gravity")) {
                 if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
                     $box.offset({ left: $box.offset().left }); // clamping works here though
                     $box.data("velX", -(velX - (0.25 * velX))); 
@@ -74,8 +90,8 @@
     var applyFriction = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
-            if ($box.data("flicked") && $box.data("friction")) {
-                var margin = 1.0;
+            if ($box.data("flicked") && $box.data("friction") && !$box.data("outOfBounds")) {
+                var margin = 0.1;
                 var velX = $box.data("velX");
                 var velY = $box.data("velY");
 
@@ -194,16 +210,18 @@
                 
                     var dt = timestamp - lastTimestamp;
                     // if switching back to previous implementation, multiply velocities by 10
-                    $box.data("velX", ((lastPosition.left - $box.data("previousPosition").left)) / dt);
-                    $box.data("velY", ((lastPosition.top - $box.data("previousPosition").top)) / dt);
+                    $box.data("velX", ((lastPosition.left - $box.data("previousPosition").left) * 10) / dt);
+                    $box.data("velY", ((lastPosition.top - $box.data("previousPosition").top) * 10) / dt);
                    
 
                     $box.data("initial", false);
                 }
                 reverseDirections();
                 applyFriction();
-                console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
-                console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
+                if ($box.offset().left < 15 && $box.offset().top < 15) {
+                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
+                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
+                }
                 var offset = $box.offset();
                 offset.left += $box.data("velX");
                 offset.top += $box.data("velY");
@@ -370,7 +388,8 @@
                 gravity: true,
                 pastPositionsX: [0,0],
                 pastPositionsY: [0,0],
-                pastTimes: []
+                pastTimes: [],
+                outOfBounds: false
             });
         });
     };
