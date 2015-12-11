@@ -7,8 +7,8 @@
     var lastPosition;
     var leftBorder = $('#drawing-area').offset().left;
     var topBorder = $('#drawing-area').offset().top;
-    var rightBorder = leftBorder + $('#drawing-area').innerWidth();
-    var bottomBorder = topBorder + $('#drawing-area').innerHeight();
+    var rightBorder = leftBorder + $('#drawing-area').outerWidth();
+    var bottomBorder = topBorder + $('#drawing-area').outerHeight();
 
     var log = function (text) {
         $('#drawing-area').append('<p>' + text + '</p>');
@@ -31,10 +31,10 @@
             // use current position instead of next position
             // hard code it to move back in
             if ($box.data("flicked")) {
-                if (leftSide < leftBorder) {
+                if (nextLeftSide <= leftBorder) {
                     $box.data("outOfBounds", true);
                     //while ($box.offset().left <= leftBorder) {
-                        
+
                         $box.offset({ left: leftBorder + 5 });
                     //}
                     //$box.offset(nextLeftSide < leftBorder ? leftBorder : rightBorder, $box.offset().top);
@@ -43,14 +43,14 @@
                     // if velX is negative, then the middle negative sign will flip the 2nd velX, which
                     // succesfully reduces the absolute velocity
                 }
-                if (rightSide > rightBorder ) {
+                if (nextRightSide > rightBorder ) {
                     $box.data("outOfBounds", true);
                     //while ($box.offset().left >= rightBorder) {
                         $box.offset({ left: rightBorder - $box.outerWidth(true) - 5 });
                     //}
                     $box.data("velX", -(velX - (0.5 * velX)));
                 }
-                if (topSide < topBorder) {
+                if (nextTopSide < topBorder) {
                     console.log(topBorder);
                     $box.data("outOfBounds", true);
                     //while ($box.offset().top <= topBorder) {
@@ -58,14 +58,13 @@
                     //}
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }    
-                if (bottomSide > bottomBorder) {
+                if (nextBottomSide > bottomBorder) {
                     $box.data("outOfBounds", true);
                     //while ($box.offset().top >= bottomBorder) {
                         $box.offset({ top: bottomBorder - $box.outerHeight(true) - 5 });
                     //}
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }
-
                 $box.data("outOfBounds", false);
             }
 
@@ -98,16 +97,16 @@
                 /**
                 * Uncomment for in-air friction
                 */
-                // if (velX > margin) {
-                //     $box.data("velX", velX - 0.01);
-                // } else if (velX < -margin) {
-                //     $box.data("velX", velX + 0.01);
-                // }
-                // if (velY > margin) {
-                //     $box.data("velY", velY - 0.01);
-                // } else if (velY < -margin) {
-                //     $box.data("velY", velY + 0.01);
-                // }
+                if (velX > margin) {
+                    $box.data("velX", velX - 0.01);
+                } else if (velX < -margin) {
+                    $box.data("velX", velX + 0.01);
+                }
+                if (velY > margin) {
+                    $box.data("velY", velY - 0.01);
+                } else if (velY < -margin) {
+                    $box.data("velY", velY + 0.01);
+                }
 
                 if (Math.abs(velX) < margin) {
                     console.log("inside");
@@ -218,7 +217,7 @@
                 }
                 reverseDirections();
                 applyFriction();
-                if ($box.offset().left < 15 && $box.offset().top < 15) {
+                if ($box.offset().left < 15 || $box.offset().top < 15) {
                     console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
                     console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
                 }
