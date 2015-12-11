@@ -1,5 +1,6 @@
 $(function () {
-
+    $(document).restructure();
+    
     $.getJSON(
         // JD: 6
         "https://slack.com/api/channels.list",
