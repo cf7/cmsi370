@@ -62,8 +62,6 @@
         $("body").unbind("mousemove", dragHandler);
     };
 
-
-    // might not need this
     var hoverIn = function (event) {
         console.log("hoverIn");
         var $element = $(event.target);

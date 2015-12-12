@@ -1,8 +1,4 @@
 (function ($) {
-
-    // plugins have expectation of what it can be applied to
-    // expect standard html structures
-
     var lastTimestamp = 0;
     var lastPosition;
     var leftBorder = $('#drawing-area').offset().left;
@@ -26,36 +22,25 @@
            
             if ($box.data("flicked")) {
                 if (nextLeftSide <= leftBorder) {
-                    $box.data("outOfBounds", true);
-                    console.log("before");
-                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
-                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
                     $box.offset({ left: leftBorder + 5 });
                     $box.data("velX", -(velX - (0.5 * velX))); 
                     // suggested for me to Math.abs somewhere around here cuz otherwise velocity only increases
                     // I think this still works though because having (velX - (0.25 * velX)),
                     // if velX is negative, then the middle negative sign will flip the 2nd velX, which
                     // succesfully reduces the absolute velocity
-                    console.log("after");
-                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
-                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
                 }
                 if (nextRightSide > rightBorder ) {
-                    $box.data("outOfBounds", true);
                     $box.offset({ left: rightBorder - $box.outerWidth(true) - 5 });
                     $box.data("velX", -(velX - (0.5 * velX)));
                 }
                 if (nextTopSide < topBorder) {
-                    $box.data("outOfBounds", true);
                     $box.offset({ top: topBorder + 5 });
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }    
                 if (nextBottomSide > bottomBorder) {
-                    $box.data("outOfBounds", true);
                     $box.offset({ top: bottomBorder - $box.outerHeight(true) - 5 });
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }
-                //$box.data("outOfBounds", false);
             }
 
             if ($box.data("gravity")) {
@@ -79,7 +64,7 @@
     var applyFriction = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
-            if ($box.data("flicked") && $box.data("friction") && !$box.data("outOfBounds")) {
+            if ($box.data("flicked") && $box.data("friction")) {
                 var margin = 0.1;
                 var velX = $box.data("velX");
                 var velY = $box.data("velY");
@@ -114,94 +99,18 @@
     }
 
     var setLastTimestamp = function (timestamp) {
-        // $('div.box').each(function (index) {
-        //     var $box = $(this);
-        //     if ($box.data("flicked")) {
-        //         var pastTimes = $(this).data("pastTimes");
-        //         pastTimes[0] = timestamp;
-        //         pastTimes.reverse();
-        //         pastTimes.shift();
-        //         pastTimes.reverse();
-        //         $box.data("pastTimes", pastTimes);
-        //     }
-        // });
         lastTimestamp = timestamp;
     }
 
-    // var incrementPositionData = function () {
-    //     $('div.box').each(function (index) {
-    //         var $box = $(this);
-    //         if ($box.data("initial")) {
-    //             var pastPositionsX = $box.data("pastPositionsX");
-    //             var pastPositionsY = $box.data("pastPositionsY");
-    //             var pastTimes = $box.data("pastTimes");
-
-    //             if (pastPositionsX.length === 10) {
-    //                 pastPositionsX.shift();
-    //                 pastPositionsX[pastPositionsX.length - 1] = $box.offset().left;
-    //             } else {
-    //                 pastPositionsX[0] = $box.offset().left;
-    //                 pastPositionsX.reverse();
-    //                 pastPositionsX.shift();
-    //                 pastPositionsX.reverse();
-    //             }
-
-    //             if (pastPositionsY.length === 10) {
-    //                 pastPositionsY.shift();
-    //                 pastPositionsY[pastPositionsY.length - 1] = $box.offset().top;
-    //             } else {
-    //                 pastPositionsY[0] = $box.offset().top;
-    //                 pastPositionsY.reverse();
-    //                 pastPositionsY.shift();
-    //                 pastPositionsY.reverse();
-    //             }
-
-    //             if (pastTimes.length === 10) {
-    //                 pastTimes.shift();
-    //                 window.requestAnimationFrame(setLastTimestamp);
-    //             } else {
-    //                 window.requestAnimationFrame(setLastTimestamp);
-    //             }
-                
-    //             $box.data("pastPositionsX", pastPositionsX);
-    //             $box.data("pastPositionsY", pastPositionsY);
-    //             $box.data("pastTimes", pastTimes);
-    //         }
-    //     });
-    // }
-
-    var sum = function (array) {
-        var total = 0;
-        for (i in array) {
-            total += i;
-        }
-        return total;
-    }
-
     var flick = function (timestamp) {
-        var noneMoving = true;
+        //var noneMoving = true;
         $("div.box").each(function (index) {
             var $box = $(this);
             if ($box.data("flicked")) {
                 if ($box.data("initial")) {
-                    // var pastPositionsX = $box.data("pastPositionsX");
-                    // var pastPositionsY = $box.data("pastPositionsY");
-                    // var avgXDist = sum(pastPositionsX) / pastPositionsX.length;
-                    // log("avg x " + avgXDist);
-                    // var avgYDist = sum(pastPositionsY) / pastPositionsY.length;
-                    // var pastTimes = $box.data("pastTimes");
-                    // log("time " + sum(pastTimes));
-                    // var avgTime = sum(pastTimes) / pastTimes.length;
-                    // $box.data("velX", avgXDist / avgTime);
-                    // log($box.data("velX"));
-                    // $box.data("velY", avgYDist / avgTime);
-                
                     var dt = timestamp - lastTimestamp;
-                    // if switching back to previous implementation, multiply velocities by 10
                     $box.data("velX", ((lastPosition.left - $box.data("previousPosition").left) * 10) / dt);
                     $box.data("velY", ((lastPosition.top - $box.data("previousPosition").top) * 10) / dt);
-                   
-
                     $box.data("initial", false);
                 }
                 reverseDirections();
@@ -234,7 +143,6 @@
             // Don't bother if we aren't tracking anything.
             if (touch.target.movingBox) {
                 // Reposition the object.
-                // incrementPositionData();
                 touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
                 window.requestAnimationFrame(setLastTimestamp);
                 touch.target.movingBox.offset({
@@ -265,10 +173,6 @@
             }
         });
     };
-    // take the average of all past velocities
-    // by summing distance and dividing by avg distance  and summing total time
-    // and dividing by avg time so far
-    // initial velocity can then only be used to find direction of travel
 
     /**
      * Indicates that an element is unhighlighted.
