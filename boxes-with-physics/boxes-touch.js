@@ -97,16 +97,16 @@
                 /**
                 * Uncomment for in-air friction
                 */
-                if (velX > margin) {
-                    $box.data("velX", velX - 0.01);
-                } else if (velX < -margin) {
-                    $box.data("velX", velX + 0.01);
-                }
-                if (velY > margin) {
-                    $box.data("velY", velY - 0.01);
-                } else if (velY < -margin) {
-                    $box.data("velY", velY + 0.01);
-                }
+                // if (velX > margin) {
+                //     $box.data("velX", velX - 0.01);
+                // } else if (velX < -margin) {
+                //     $box.data("velX", velX + 0.01);
+                // }
+                // if (velY > margin) {
+                //     $box.data("velY", velY - 0.01);
+                // } else if (velY < -margin) {
+                //     $box.data("velY", velY + 0.01);
+                // }
 
                 if (Math.abs(velX) < margin) {
                     console.log("inside");

@@ -14,8 +14,10 @@
     var dragTile;
 
     var dragHandler = function (event) {
-        $(".underTile").css({ border: "" });
-        $(".underTile").removeClass("underTile");
+        if ($(".underTile").length > 0) {
+            $(".underTile").css({ border: "" });
+            $(".underTile").removeClass("underTile");
+        }
         dragTile.offset({ 
             left: event.pageX - dragTile.deltaX, 
             top: event.pageY - dragTile.deltaY
@@ -25,19 +27,26 @@
         dragTile.hide();
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top));
         dragTile.show();
-        $element.addClass("underTile");
-        $(".underTile").css({ border: "5px dotted blue" });
+        if ($element.is("div") && !$element.hasClass("row") && !$element.hasClass("container")) {
+            $element.addClass("underTile");
+            $(".underTile").css({ border: "5px dotted blue" });
+            console.log($(".underTile").offset());
+            console.log("dragTileY: " + $("#tile-being-dragged").offset().top + " dragTileX: " + $("#tile-being-dragged").offset().left);
+            console.log("mouseY: " + mousePosition.top + " mouseX: " + mousePosition.left );
+        }
     };
 
 
     var dragCleanUp = function (event) {
-        $(".underTile").css({ border: "" });
-        $(".underTile").removeClass("underTile");
+        if ($(".underTile").length > 0) {
+            $(".underTile").css({ border: "" });
+            $(".underTile").removeClass("underTile");
+        }
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top)); //coudn't find jQuery equivalent
         console.log($element);
-        if ($element.parent().hasClass("tile")) {
+        if ($element.is("div") && $element.parent().is(".tile")) {
             $("#original").parent().attr("id", "sendingTile");
             $element.parent().attr("id", "receivingTile");
             $("#sendingTile").append($element);
@@ -83,17 +92,12 @@
 
     $.fn.restructure = function () {
         addDivs();
-
-        /**
-        * Add feedback for the user!!!!!!!!!!!!!!!!
-        */
-
         this.mousedown(function (event) {
             if ($(event.target).parent().hasClass("tile")) {
                 $(event.target).attr("id", "original");
                 dragTile = $(event.target).clone();
                 dragTile.attr("id", "tile-being-dragged");
-                var startOffset = $(event.target).offset(); // do not use the offset of the clone!
+                var startOffset = $(event.target).offset();
                 dragTile.deltaX = event.pageX - startOffset.left;
                 dragTile.deltaY = event.pageY - startOffset.top;
                 dragTile.offset({

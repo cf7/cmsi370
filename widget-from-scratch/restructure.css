@@ -1,3 +1,7 @@
-.tile-being-dragged {
-    position: relative;
+#tile-being-dragged {
+    position: absolute;
+}
+
+.selected-border {
+    border: 5px solid white;
 }
