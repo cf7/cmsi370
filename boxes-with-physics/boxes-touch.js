@@ -10,10 +10,6 @@
     var rightBorder = leftBorder + $('#drawing-area').outerWidth();
     var bottomBorder = topBorder + $('#drawing-area').outerHeight();
 
-    var log = function (text) {
-        $('#drawing-area').append('<p>' + text + '</p>');
-    }
-
     var reverseDirections = function () {
         $('div.box').each(function (index) {
             var $box = $(this);
@@ -28,49 +24,43 @@
             var nextTopSide = topSide + velY;
             var nextBottomSide = bottomSide + velY;
            
-            // use current position instead of next position
-            // hard code it to move back in
             if ($box.data("flicked")) {
                 if (nextLeftSide <= leftBorder) {
                     $box.data("outOfBounds", true);
-                    //while ($box.offset().left <= leftBorder) {
-
-                        $box.offset({ left: leftBorder + 5 });
-                    //}
-                    //$box.offset(nextLeftSide < leftBorder ? leftBorder : rightBorder, $box.offset().top);
-                    $box.data("velX", -(velX - (0.5 * velX))); // Math.abs somewhere cuz otherwise velocity only increases
-                    // I think this will still work because having (velX - (0.25 * velX)),
+                    console.log("before");
+                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
+                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
+                    $box.offset({ left: leftBorder + 5 });
+                    $box.data("velX", -(velX - (0.5 * velX))); 
+                    // suggested for me to Math.abs somewhere around here cuz otherwise velocity only increases
+                    // I think this still works though because having (velX - (0.25 * velX)),
                     // if velX is negative, then the middle negative sign will flip the 2nd velX, which
                     // succesfully reduces the absolute velocity
+                    console.log("after");
+                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
+                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
                 }
                 if (nextRightSide > rightBorder ) {
                     $box.data("outOfBounds", true);
-                    //while ($box.offset().left >= rightBorder) {
-                        $box.offset({ left: rightBorder - $box.outerWidth(true) - 5 });
-                    //}
+                    $box.offset({ left: rightBorder - $box.outerWidth(true) - 5 });
                     $box.data("velX", -(velX - (0.5 * velX)));
                 }
                 if (nextTopSide < topBorder) {
-                    console.log(topBorder);
                     $box.data("outOfBounds", true);
-                    //while ($box.offset().top <= topBorder) {
-                        $box.offset({ top: topBorder + 5 });
-                    //}
+                    $box.offset({ top: topBorder + 5 });
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }    
                 if (nextBottomSide > bottomBorder) {
                     $box.data("outOfBounds", true);
-                    //while ($box.offset().top >= bottomBorder) {
-                        $box.offset({ top: bottomBorder - $box.outerHeight(true) - 5 });
-                    //}
+                    $box.offset({ top: bottomBorder - $box.outerHeight(true) - 5 });
                     $box.data("velY", -(velY - (0.5 * velY)));
                 }
-                $box.data("outOfBounds", false);
+                //$box.data("outOfBounds", false);
             }
 
             if ($box.data("gravity")) {
                 if (nextLeftSide <= leftBorder || nextRightSide >= rightBorder) {
-                    $box.offset({ left: $box.offset().left }); // clamping works here though
+                    $box.offset({ left: $box.offset().left });
                     $box.data("velX", -(velX - (0.25 * velX))); 
                 }
                 if (nextTopSide <= topBorder || nextBottomSide >= bottomBorder) {
@@ -109,7 +99,6 @@
                 // }
 
                 if (Math.abs(velX) < margin) {
-                    console.log("inside");
                     $box.data("velX", 0);
                 }
                 if (Math.abs(velY) < margin) {
@@ -217,10 +206,6 @@
                 }
                 reverseDirections();
                 applyFriction();
-                if ($box.offset().left < 15 || $box.offset().top < 15) {
-                    console.log("velX: " + $box.data("velX") + " velY: " + $box.data("velY"));
-                    console.log("X : " + $box.offset().left + " Y: " + $box.offset().top);
-                }
                 var offset = $box.offset();
                 offset.left += $box.data("velX");
                 offset.top += $box.data("velY");
