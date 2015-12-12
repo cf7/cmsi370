@@ -19,7 +19,12 @@
     color: white;
 }
 
+#intro {
+    background-color: rgb(50,255,150);
+}
+
 #channel-settings-col {
+    border: 1px solid black;
     background-color: rgb(50,255,100);
 }
 
