@@ -15,8 +15,8 @@
 
     var dragHandler = function (event) {
         if ($(".underTile").length > 0) {
-            $(".underTile").css({ border: "" });
-            $(".underTile").removeClass("underTile");
+            $(".underTile").css({ border: "" })
+                        .removeClass("underTile");
         }
         dragTile.offset({ 
             left: event.pageX - dragTile.deltaX, 
@@ -30,17 +30,14 @@
         if ($element.is("div") && !$element.hasClass("row") && !$element.hasClass("container")) {
             $element.addClass("underTile");
             $(".underTile").css({ border: "5px dotted blue" });
-            console.log($(".underTile").offset());
-            console.log("dragTileY: " + $("#tile-being-dragged").offset().top + " dragTileX: " + $("#tile-being-dragged").offset().left);
-            console.log("mouseY: " + mousePosition.top + " mouseX: " + mousePosition.left );
         }
     };
 
 
     var dragCleanUp = function (event) {
         if ($(".underTile").length > 0) {
-            $(".underTile").css({ border: "" });
-            $(".underTile").removeClass("underTile");
+            $(".underTile").css({ border: "" })
+                        .removeClass("underTile");
         }
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
@@ -102,8 +99,8 @@
                             left: event.pageX - dragTile.deltaX,
                             top: event.pageY - dragTile.deltaY
                         });
-                $("body").append(dragTile);
-                $("body").mousemove(dragHandler);
+                $("body").append(dragTile)
+                        .mousemove(dragHandler);
                 dragTile.mouseup(dragCleanUp);
             }
         });
