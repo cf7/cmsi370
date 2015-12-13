@@ -120,7 +120,6 @@
         if (!noneMoving) {
             window.requestAnimationFrame(flick);
         } else {
-            console.log("return from flick");
             return;
         }
     }

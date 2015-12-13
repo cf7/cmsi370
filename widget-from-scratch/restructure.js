@@ -42,25 +42,21 @@
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
         var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top)); //coudn't find jQuery equivalent
-        console.log($element);
         if ($element.is("div") && $element.parent().is(".tile")) {
             $("#original").parent().attr("id", "sendingTile");
             $element.parent().attr("id", "receivingTile");
             $("#sendingTile").append($element);
             $("#receivingTile").append($("#original"));
             dragTile.remove();
-            $(".tile").removeAttr("id");
-            $("#original").removeAttr("id");
+            $(".tile, #original").removeAttr("id");
         } else {
-            $("#original").removeAttr("id");
-            $(".tile").removeAttr("id");
+            $(".tile, #original").removeAttr("id");
             dragTile.remove();
         }
         $("body").unbind("mousemove", dragHandler);
     };
 
     var hoverIn = function (event) {
-        console.log("hoverIn");
         var $element = $(event.target);
         if ($element.parent().hasClass("tile")) {
             $element.css({ border: "5px solid blue" });
