@@ -41,7 +41,7 @@
         }
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
-        var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top)); //coudn't find jQuery equivalent
+        var $element = $(document.elementFromPoint(mousePosition.left, mousePosition.top));
         if ($element.is("div") && $element.parent().is(".tile")) {
             $("#original").parent().attr("id", "sendingTile");
             $element.parent().attr("id", "receivingTile");
