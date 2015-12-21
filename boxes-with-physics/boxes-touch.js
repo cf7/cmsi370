@@ -11,9 +11,10 @@
             var $box = $(this);
             var velX = $box.data("velX");
             var velY = $box.data("velY");
-            var leftSide = $box.offset().left;
+            var boxOffset = $box.data("offset") || $box.offset(); // JD: 4
+            var leftSide = boxOffset.left; // JD: 4
             var rightSide = leftSide + $box.outerWidth(true);
-            var topSide = $box.offset().top;
+            var topSide = boxOffset.top; // JD: 4
             var bottomSide = topSide + $box.outerHeight(true);
             var nextLeftSide = leftSide + velX;
             var nextRightSide = rightSide + velX;
@@ -58,7 +59,7 @@
                 * However, this does not get rid of the sticking problem
                 * entirely.
                 */
-                if (velX > margin) {
+                if (velX > margin) { // JD: 3
                     $box.data("velX", velX - 0.01);
                 }
                 if (velX < -margin) {
@@ -107,7 +108,7 @@
                 }
                 reverseDirections();
                 applyFriction();
-                var offset = $box.offset();
+                var offset = $box.data("offset") || $box.offset(); // JD: 4
                 offset.left += $box.data("velX");
                 offset.top += $box.data("velY");
                 $box.offset(offset);
@@ -136,10 +137,14 @@
                 // Reposition the object.
                 touch.target.movingBox.data("previousPosition", touch.target.movingBox.offset());
                 window.requestAnimationFrame(setLastTimestamp);
-                touch.target.movingBox.offset({
+
+                var newOffset = { // JD: 4
                     left: touch.pageX - touch.target.deltaX,
                     top: touch.pageY - touch.target.deltaY
-                });
+                };
+                touch.target.movingBox
+                    .data("offset", newOffset)
+                    .offset(newOffset);
             }
         });
 
@@ -157,6 +162,7 @@
                 // touch.target.movingBox.
                 lastPosition = touch.target.movingBox.offset();
                 touch.target.movingBox
+                    .data("offset", null) // JD: 4
                     .data("flicked", true)
                     .data("initial", true);
                 window.requestAnimationFrame(flick);
@@ -189,6 +195,7 @@
             touch.target.movingBox
                 .data("velX", 0)
                 .data("velY", 0)
+                .data("offset", startOffset) // JD: 4
                 .data("gravity", false);
             touch.target.deltaX = touch.pageX - startOffset.left;
             touch.target.deltaY = touch.pageY - startOffset.top;
