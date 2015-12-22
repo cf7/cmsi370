@@ -206,7 +206,7 @@
         event.stopPropagation();
     };
 
-    var gravity = function (event) {
+    var gravity = function (event) { // JD: 6
         var beta = event.beta;
         var gamma = event.gamma;
         var mass = 0.1;
@@ -272,7 +272,9 @@
     };
 
     $.fn.boxesTouch = function () {
-        window.addEventListener("deviceorientation", gravity, true);
+        window.addEventListener("deviceorientation", gravity, true); // JD: 5
         setDrawingArea(this);
     };
 }(jQuery));
+
+// JD: 7
