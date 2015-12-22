@@ -1,5 +1,5 @@
 $(function () {
-    $(document).restructure();
+    $(document).restructure(); // JD 1211: 2
     
     $.getJSON(
         // JD: 6

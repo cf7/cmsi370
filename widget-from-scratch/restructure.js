@@ -29,15 +29,15 @@
         dragTile.show();
         if ($element.is("div") && !$element.hasClass("row") && !$element.hasClass("container")) {
             $element.addClass("underTile");
-            $(".underTile").css({ border: "5px dotted blue" });
+            $(".underTile").css({ border: "5px dotted blue" }); // JD: 5
         }
     };
 
 
     var dragCleanUp = function (event) {
         if ($(".underTile").length > 0) {
-            $(".underTile").css({ border: "" })
-                        .removeClass("underTile");
+            $(".underTile").css({ border: "" }) // JD: 5
+                        .removeClass("underTile"); // JD: 4
         }
         var mousePosition = $("body").data("mouseCoordinates");
         dragTile.hide();
@@ -59,19 +59,19 @@
     var hoverIn = function (event) {
         var $element = $(event.target);
         if ($element.parent().hasClass("tile")) {
-            $element.css({ border: "5px solid blue" });
+            $element.css({ border: "5px solid blue" }); // JD: 5
         }
     };
 
     var hoverOut = function (event) {
         var $element = $(event.target);
         if ($element.parent().hasClass("tile")) {
-            $element.css({ border: "" });
+            $element.css({ border: "" }); // JD: 5
         }
     };
 
     var addDivs = function () {
-        $(".col-sm-4, .col-sm-6").each(function (index) {
+        $(".col-sm-4, .col-sm-6").each(function (index) { // JD: 3
             var $col = $(this);
             $col.wrap("<div class='tile'></div>");
         });
@@ -92,11 +92,11 @@
                 dragTile.deltaX = event.pageX - startOffset.left;
                 dragTile.deltaY = event.pageY - startOffset.top;
                 dragTile.offset({
-                            left: event.pageX - dragTile.deltaX,
+                            left: event.pageX - dragTile.deltaX, // JD: 4
                             top: event.pageY - dragTile.deltaY
                         });
                 $("body").append(dragTile)
-                        .mousemove(dragHandler);
+                        .mousemove(dragHandler); // JD: 4
                 dragTile.mouseup(dragCleanUp);
             }
         });

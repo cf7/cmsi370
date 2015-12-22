@@ -1,3 +1,3 @@
 $(function () {
-    $(this).restructure();
+    $(this).restructure(); // JD: 2
 });
